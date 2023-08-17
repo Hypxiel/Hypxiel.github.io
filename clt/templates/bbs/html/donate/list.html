@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>赞赏者名册 - {aspbbs:guestConfig.SiteName}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="keywords" content="">
+  <meta name="description" content="">
+{aspbbs:template src=common/link}
+</head>
+<body>
+
+{aspbbs:template src=common/header_user}
+
+    <!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script
+    ><![endif]-->
+    <div class="layui-container fly-marginTop">
+      <div class="fly-panel">
+        <div class="fly-panel-title" style="text-align: center; font-size: 18px">
+          ASPBBS 赞赏者名册
+        </div>
+        <div class="fly-panel-main">
+          <div style="position: relative">
+            <a href="{aspbbs:func:getThreadLink(3)}" class="layui-btn layui-bg-red">前往赞赏</a>
+            <i class="layui-icon" style="
+                position: relative;
+                top: 4px;
+                left: 10px;
+                color: #999;
+                font-size: 20px;
+                cursor: pointer;
+              " id="LAY_tips">&#xe702;</i>
+            <div id="LAY_sumPrice" style="position: absolute; right: 0; top: 10px"></div>
+          </div>
+          <table class="layui-hide" id="LAY_sponsors"></table>
+        </div>
+      </div>
+    </div>
+
+{aspbbs:template src=self/footer}
+    <script>
+      layui.use(["table", "util"], function (table, util) {
+        var layer = layui.layer;
+        table.render({
+          elem: "#LAY_sponsors",
+          url: "?c=bbs--thanks&a=search",
+          limit: "20",
+          page: true,
+          cols: [
+            [
+              {
+                title: "赞赏者",
+                minWidth: 168,
+                templet: function (d) {
+                  return (
+                    '<div><a href1="/u/' +
+                    d.user.uid +
+                    '" target1="_blank" class="layui-table-link"><img onerror="this.src=\'{aspbbs:sitetplpath}/res/images/avatar/2.jpg\'" src="' +
+                    d.user.avatar +
+                    '" style="width: 30px; margin-right: 10px;"><cite>' +
+                    d.user.username +
+                    "</cite></a></div>"
+                  );
+                },
+              },
+              {
+                field: "price",
+                title: "累计金额",
+                minWidth: 118,
+                sort: true,
+                templet: function (d) {					
+                  return (
+                    '<span style="color: #FF5722;">￥' + d.price + "</span>"
+                  );
+                },
+              },
+              { field: "authDesc", minWidth: 200, title: "留言" },
+              {
+                title: "赞赏时间",
+                width: 200,
+                templet: function (d) {
+                  return util.toDateString(d.update_time);
+                },
+              },
+            ],
+          ],
+          size: "lg",
+          height: "full-225",
+          text: {
+            none:
+              '<i class="iconfont icon-tishilian" style="line-height: 260px; font-size: 200px; color: #393D49;"></i><br>真是酷极了，暂时还没有半个人赞赏的呢',
+          },
+          done: function (res) {
+            layui
+              .$("#LAY_sumPrice")
+              .html(
+                '赞赏总额：<span style="color: #F5550E;">￥' +
+                  res.sumPrice +
+                  "</span>"
+              );
+          },
+        });
+      });
+    </script>
+	{aspbbs:template src=self/donate-js}
+</body>
+</html>

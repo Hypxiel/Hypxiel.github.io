@@ -1,0 +1,52 @@
+<div class="fly-header layui-bg-black">
+  <div class="layui-container">
+    {aspbbs:template src=self/header_top}
+    
+    <ul class="layui-nav fly-nav-user">
+      
+      {if: "{aspbbs:_S.adminName}" = ""}
+      <li class="layui-nav-item">
+        <a class="iconfont icon-touxiang layui-hide-xs" href="{aspbbs:func:getLoginLink}"></a>
+      </li>
+      <li class="layui-nav-item">
+        <a href="{aspbbs:func:getLoginLink}">登入</a>
+      </li>
+      <li class="layui-nav-item">
+        <a href="{aspbbs:func:getRegLink}">注册</a>
+      </li>
+	  {if1: "{aspbbs:guestConfig.LoginQQ}" <> "0" AND POP_MVC.File.IsExists("./API/qq") }
+      <li class="layui-nav-item layui-hide-xs">
+        <a href="{aspbbs:sitepath}/API/qq/" onclick="layer.msg('正在通过QQ登入', {icon:16, shade: 0.1, time:0})" title="QQ登入" class="iconfont icon-qq"></a>
+      </li>
+	  {end if1}
+	  
+	  {if1: "{aspbbs:guestConfig.LoginWeibo}" <> "0" AND POP_MVC.File.IsExists("./API/sina") }
+      <li class="layui-nav-item layui-hide-xs">
+        <a href="{aspbbs:sitepath}/API/sina/" onclick="layer.msg('正在通过微博登入', {icon:16, shade: 0.1, time:0})" title="微博登入" class="iconfont icon-weibo"></a>
+      </li>
+      {end if1}
+	  
+      {else}
+      <li class="layui-nav-item">
+        <a class="fly-nav-avatar" href="javascript:;">
+          <cite class="layui-hide-xs">{aspbbs:_S.adminName}</cite>
+          <i class="iconfont icon-renzheng layui-hide-xs" title="认证信息：layui 作者"></i>
+		  {if1: $_S.IsAdmin=1}<i class="layui-badge fly-badge-vip layui-hide-xs">{aspbbs:S_.GroupName}</i>{end if1}
+          {if1: $_S.GroupID=4}<i class="layui-badge fly-badge-vip layui-hide-xs">VIP</i>{end if1}
+          <img src="{aspbbs:admin.Avatar}">
+        </a>
+        <dl class="layui-nav-child">
+		  <dd><a href="{aspbbs:indexprefix}bbs--user{aspbbs:guestConfig.PageSuffix}"><i class="layui-icon">&#xe612;</i>用户中心</a></dd>
+          <dd><a href="{aspbbs:indexprefix}bbs--user_settings{aspbbs:guestConfig.PageSuffix}"><i class="layui-icon">&#xe620;</i>基本设置</a></dd>
+		  <hr style="margin: 5px 0;">
+          <dd><a href="{aspbbs:indexprefix}bbs--user_message{aspbbs:guestConfig.PageSuffix}"><i class="iconfont icon-tongzhi" style="top: 4px;"></i>我的消息</a></dd>
+          <dd><a href="{aspbbs:indexprefix}u_{aspbbs:_S.adminId}"><i class="layui-icon" style="margin-left: 2px; font-size: 22px;">&#xe68e;</i>我的主页</a></dd>
+          <hr style="margin: 5px 0;">
+          <dd><a href="{aspbbs:func:getLogoutLink}" style="text-align: center;">退出</a></dd>
+        </dl>
+      </li>
+      {end if}
+      
+    </ul>
+  </div>
+</div>

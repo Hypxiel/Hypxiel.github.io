@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>我的消息 - {aspbbs:guestConfig.SiteName} </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+{aspbbs:template src=common/link}
+</head>
+<body>
+
+{aspbbs:template src=common/header_user}
+
+<div class="layui-container fly-marginTop fly-user-main">
+	{aspbbs:template src=common/user-nav}
+  
+  
+  <div class="fly-panel fly-panel-user" pad20>
+	  <div class="layui-tab layui-tab-brief" lay-filter="user" id="LAY_msg" style="margin-top: 15px;">
+		{if: $RecordCount <> 0 }
+		<button class="layui-btn layui-btn-danger" id="LAY_delallmsg">清空全部消息</button>
+		{end if}
+		
+	    <div  id="LAY_minemsg" style="margin-top: 10px;">
+		{if: $RecordCount = 0 }
+        <div class="fly-none">您暂时没有最新消息</div>
+		{else}
+        <ul class="mine-msg">
+			{aspbbs:looprs data=message page=0}
+          <li data-id="[looprs:MessageID]">
+            <blockquote class="layui-elem-quote">
+              [looprs:Message]
+            </blockquote>
+            <p><span>[looprs:AddTime func=POP_MVC.datestr(@me)]</span><a href="javascript:;" class="layui-btn layui-btn-small layui-btn-danger fly-delete">删除</a></p>
+          </li>
+		    {/aspbbs:looprs}
+        </ul>
+		{end if}
+      </div>
+	  </div>
+	</div>
+
+</div>
+
+
+{aspbbs:template src=self/footer}
+
+</body>
+</html>

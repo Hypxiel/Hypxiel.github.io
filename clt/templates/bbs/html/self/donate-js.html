@@ -1,0 +1,15 @@
+{//捐赠处理的js代码，捐赠图片为res/images/donate.gif，可相应替换}
+<script>
+layui
+  .$("#LAY_tips")
+  .on("mouseenter", function () {
+	this.index = layer.tips(
+	  '<p><img style="width:100%;" src="{aspbbs:sitetplpath}/res/images/donate.gif" /></p><p>POPASP/ASPBBS的发展离不开大家的支持，我们会继续将POPASP/ASPBBS做得更好！我们并非行乞者，却并不拒绝赞赏<br><p style="text-align:right;">—— POPASP</p>',
+	  this,
+	  { time: -1, maxWidth: 400, tips: [3, "#3A3D49"] }
+	);
+  })
+  .on("mouseleave", function () {
+	layer.close(this.index);
+  });
+</script>

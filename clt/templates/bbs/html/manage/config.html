@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>网站配置 - {aspbbs:guestConfig.SiteName}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+{aspbbs:template src=common/link}
+</head>
+<body>
+{aspbbs:template src=common/header_user}
+
+<div class="layui-container fly-marginTop fly-user-main">
+{aspbbs:template src=common/user-nav}
+  
+  
+  <div class="fly-panel fly-panel-user" pad20>
+    <div class="layui-tab layui-tab-brief" lay-filter="user">
+      <ul class="layui-tab-title" id="LAY_mine">
+		<!--{loopdb="::GroupRS"}-->
+        <li class="[=$__index=0?:layui-this]" lay-id="Group-[@GroupID]">[@GroupName]</li>
+		<!--{/loopdb}-->
+      </ul>
+      <div class="layui-tab-content" style="padding: 20px 0;">
+		<!--{loopdb="::rs" page="0"}-->
+						[:$ConfigValue = @ConfigValue]
+						[:$ConfigName = @ConfigName]						
+		
+		<!--[if: @GroupName <> $TempGroup]-->
+			<!--[[if:$rs__index>0]]-->
+				<div class="layui-form-item">
+					<input type="hidden" name="GroupID" value="[[[$GroupID]]]" />
+				  <button class="layui-btn" key="set-mine" lay-filter="*" lay-submit>确认修改</button>
+				</div>
+			 </form>
+			</div>		
+			<!---[[/if]]-->
+        <div class="layui-form layui-form-pane layui-tab-item[[= 0 = $rs__index?: layui-show]]">
+          <form method="post" action="{aspbbs:indexprefix}bbs--manage_doEditConfigs">
+			[[:$TempGroup = @GroupName]]
+		<!--[else]-->
+			[[:$GroupID = @GroupID]]
+		<!--[/if]-->
+			<!--[if:@ConfigInput="radio"]-->
+				<div class="layui-form-item">
+				  <label for="L_[$ConfigName]" class="layui-form-label" title='[=@ConfigTitle & ":" & @ConfigDesc]'>[@ConfigTitle]</label>
+				  <div class="layui-input-inline">
+					[[:$arr=split(@SelectOptions,"###")]]
+					<!--[[looparr="$arr"]]-->
+					<input type="radio"  id="L_[$ConfigName]" name="[[[$ConfigName]]]" value="[[[=POP_MVC.String.after($arr__value,"|")]]]" [[[=$ConfigValue=POP_MVC.String.after($arr__value,"|")?:checked]]] title="[[[=POP_MVC.String.before($arr__value,"|")]]]" class="layui-input"/>
+					<!--[[/looparr]]-->
+				  </div>
+				  <div class="layui-form-mid layui-word-aux layui-show-xs layui-hide-md">[=@ConfigTitle & iif( isNul(@ConfigDesc) , "" ,  ":" & @ConfigDesc) ]</div>
+				</div>
+			<!--[elseif:@ConfigInput="input"]-->
+				<div class="layui-form-item">
+				  <label for="L_[$ConfigName]" class="layui-form-label" title='[=@ConfigTitle & ":" & @ConfigDesc]'>[@ConfigTitle]</label>
+				  <div class="layui-input-inline">
+					<input type="text" id="L_[$ConfigName]" name="[@ConfigName]" autocomplete="off" value="[@ConfigValue]" class="layui-input">
+				  </div>
+				  <div class="layui-form-mid layui-word-aux layui-show-xs layui-hide-md">[=@ConfigTitle & iif( isNul(@ConfigDesc) , "" ,  ":" & @ConfigDesc) ]</div>
+				</div>
+			<!--[elseif:@ConfigInput="number"]-->
+				<div class="layui-form-item">
+				  <label for="L_[$ConfigName]" class="layui-form-label" title='[=@ConfigTitle & ":" & @ConfigDesc]'>[@ConfigTitle]</label>
+				  <div class="layui-input-inline">
+					<input type="text" id="L_[$ConfigName]" name="[@ConfigName]" autocomplete="off" value="[@ConfigValue]" class="layui-input">
+				  </div>
+				  <div class="layui-form-mid layui-word-aux layui-show-xs layui-hide-md">[=@ConfigTitle & iif( isNul(@ConfigDesc) , "" ,  ":" & @ConfigDesc) ]</div>
+				</div>
+			<!--[elseif:@ConfigInput="password"]-->	
+				<div class="layui-form-item">
+				  <label for="L_[$ConfigName]" class="layui-form-label" title='[=@ConfigTitle & ":" & @ConfigDesc]'>[@ConfigTitle]</label>
+				  <div class="layui-input-inline">
+					<input type="password" id="L_[$ConfigName]" name="[@ConfigName]" autocomplete="off" value="[@ConfigValue]" class="layui-input">
+				  </div>
+				  <div class="layui-form-mid layui-word-aux layui-show-xs layui-hide-md">[=@ConfigTitle & iif( isNul(@ConfigDesc) , "" ,  ":" & @ConfigDesc) ]</div>
+				</div>
+			<!--[elseif:@ConfigInput="upload"]-->
+				<div class="layui-form-item">					
+					<div class="layui-upload">
+						<label for="L_[$ConfigName]" class="layui-form-label" title='[=@ConfigTitle & ":" & @ConfigDesc]'>[@ConfigTitle]</label>
+					  <button type="button" class="layui-btn iaspcms-siteconfig-upload">上传图片</button>
+					  <input type="hidden" name="[@ConfigName]" class="iaspcms-siteconfig-input" value="[@ConfigValue]" />
+					  <div class="layui-upload-list">
+						<img class="layui-upload-img" src="[@ConfigValue]" style="width: 230px; height: 230px; margin: 0 10px 10px 0;">
+						<p></p>
+					  </div>
+					</div>   					
+				</div>
+				<hr class="layui-bg-orange">
+			<!--[elseif:@ConfigInput="uploads"]-->
+				<div class="layui-form-item">					
+					<div class="layui-upload">
+						<label for="L_[$ConfigName]" class="layui-form-label" title='[=@ConfigTitle & ":" & @ConfigDesc]'>[@ConfigTitle]</label>
+					  <button type="button" class="layui-btn iaspcms-siteconfig-uploads">上传图片</button>
+					  <textarea placeholder="" id="L_[$ConfigName]"  name="[@ConfigName]" autocomplete="off" class="layui-textarea iaspcms-siteconfig-textarea" style="height: 80px;">[[=isNul(@TextSeparate)?@ConfigValue:(@ConfigValue)]]</textarea>
+					</div>   					
+				</div>
+				<hr class="layui-bg-orange">
+			<!--[elseif:@ConfigInput="textarea"]-->
+				<div class="layui-form-item layui-form-text">
+				  <label for="L_[$ConfigName]" class="layui-form-label" title='[=@ConfigTitle & ":" & @ConfigDesc]'>[@ConfigTitle]</label>
+				  <div class="layui-input-block">
+					<textarea placeholder="" id="L_[$ConfigName]"  name="[@ConfigName]" autocomplete="off" class="layui-textarea" style="height: 80px;">[[=isNul(@TextSeparate)?@ConfigValue:(@ConfigValue)]]</textarea>
+				  </div>
+				  <div class="layui-form-mid layui-word-aux layui-show-xs layui-hide-md">[=@ConfigTitle & iif( isNul(@ConfigDesc) , "" ,  ":" & @ConfigDesc) ]</div>
+				</div>
+			<!--[elseif:@ConfigInput="select"]-->
+				<div class="layui-form-item">
+				  <label for="L_[$ConfigName]" class="layui-form-label" title='[=@ConfigTitle & ":" & @ConfigDesc]'>[@ConfigTitle]</label>
+				  <div class="layui-input-inline">
+					  <select name="[[@ConfigName]]" id="L_[$ConfigName]">
+						 [[@SelectOptions]]
+					  </select>
+					<script>
+						$("select[name='[$ConfigName]']").val('[$ConfigValue]');
+					</script>
+				  </div>
+				  <div class="layui-form-mid layui-word-aux layui-show-xs layui-hide-md">[=@ConfigTitle & iif( isNul(@ConfigDesc) , "" ,  ":" & @ConfigDesc) ]</div>
+				</div>
+			<!--[/if]-->
+		  <!--{/loopdb}-->	 
+				<div class="layui-form-item">
+					<input type="hidden" name="GroupID" value="{$GroupID}" />
+				  <button class="layui-btn" key="set-mine" lay-filter="*" lay-submit>确认修改</button>
+				</div>
+			 </form>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+{aspbbs:template src=self/footer}
+
+<script>
+function photoCompress(file, w, objDiv) {
+    var ready = new FileReader();
+    /*开始读取指定的Blob对象或File对象中的内容. 当读取操作完成时,readyState属性的值会成为DONE,如果设置了onloadend事件处理程序,则调用之.同时,result属性中将包含一个data: URL格式的字符串以表示所读取文件的内容.*/
+    ready.readAsDataURL(file);
+    ready.onload = function() {
+        var re = this.result;
+        canvasDataURL(re, w, objDiv);
+    }
+};
+function canvasDataURL(path, obj, callback) {
+    var img = new Image();
+    img.src = path;
+    img.onload = function() {
+        var that = this;
+        // 默认按比例压缩
+        var w = that.width,
+            h = that.height,
+            scale = w / h;
+        w = obj.width || w;
+        h = obj.height || (w / scale);
+        var quality = 0.5; // 默认图片质量为0.7
+        //生成canvas
+        var canvas = document.createElement('canvas');
+        var ctx = canvas.getContext('2d');
+        // 创建属性节点
+        var anw = document.createAttribute("width");
+        anw.nodeValue = w;
+        var anh = document.createAttribute("height");
+        anh.nodeValue = h;
+        canvas.setAttributeNode(anw);
+        canvas.setAttributeNode(anh);
+        ctx.drawImage(that, 0, 0, w, h);
+        // 图像质量
+        if(obj.quality && obj.quality <= 1 && obj.quality > 0) {
+            quality = obj.quality;
+        }
+        // quality值越小，所绘制出的图像越模糊
+        var base64 = canvas.toDataURL('image/jpeg', quality);
+        // 回调函数返回base64的值
+        callback(base64);
+    }
+}
+function convertBase64UrlToBlob(urlData) {
+    var arr = urlData.split(','),
+        mime = arr[0].match(/:(.*?);/)[1],
+        bstr = atob(arr[1]),
+        n = bstr.length,
+        u8arr = new Uint8Array(n);
+    while(n--) {
+        u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new Blob([u8arr], {
+        type: mime
+    });
+}
+layui.use('upload', function(){
+  var $ = layui.jquery
+  ,upload = layui.upload;
+  
+  //普通图片上传
+  var uploadInst = upload.render({
+    elem: '.iaspcms-siteconfig-upload'
+    ,url: '?bbs--manage_uploadAvatar' //改成您自己的上传接口
+    ,before: function(obj){
+		var item = this.item;
+      //预读本地文件示例，不支持ie8
+      obj.preview(function(index, file, result){
+		$(item).siblings(".layui-upload-list").find('img').attr('src', result); //图片链接（base64）
+      });
+    }
+    ,done: function(res){
+      //如果上传失败
+      if(res.status > 0){
+        return layer.msg(res.msg);
+      } else { //上传成功
+		var item = this.item;
+		$(item).siblings(".iaspcms-siteconfig-input").val( res.msg );
+	  }
+     
+    }
+  });
+  });
+  
+layui.use('upload', function(){
+  var $ = layui.jquery
+  ,upload = layui.upload;
+  
+  //普通图片上传
+  var uploadInst = upload.render({
+    elem: '.iaspcms-siteconfig-uploads'
+    ,url: '?bbs--manage_uploads' //改成您自己的上传接口
+    ,before: function(obj){
+		var item = this.item;
+      //预读本地文件示例，不支持ie8
+      obj.preview(function(index, file, result){
+		$(item).siblings(".layui-upload-list").find('img').attr('src', result); //图片链接（base64）
+      });
+    }
+    ,done: function(res){
+      //如果上传失败
+      if(res.status > 0){
+        return layer.msg(res.msg);
+      } else { //上传成功
+		var item = this.item;
+		$(item).siblings(".iaspcms-siteconfig-textarea").val( $(item).siblings(".iaspcms-siteconfig-textarea").val() + ',' + res.msg );
+	  }
+     
+    }
+  });
+  });
+</script>
+</body>
+</html>

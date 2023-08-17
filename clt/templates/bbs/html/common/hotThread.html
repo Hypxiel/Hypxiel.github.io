@@ -1,0 +1,14 @@
+      <dl class="fly-panel fly-list-one">
+        <dt class="fly-panel-title">{aspbbs:guestConfig.IndexHotTitle}</dt>
+		{aspbbs:looprs data=HotTopic}
+        <dd>
+          <a href="[looprs:TopicID func=getThreadLink(@me)]">[looprs:Title]</a>
+          <span><i class="iconfont icon-pinglun1"></i> [looprs:ReplyCount]</span>
+        </dd>
+		{/aspbbs:looprs}
+		
+        {if: $HotTopicCount < 1 }
+		<!-- 无数据时 -->
+        <div class="fly-none">没有相关数据</div>
+        {end if}
+      </dl>

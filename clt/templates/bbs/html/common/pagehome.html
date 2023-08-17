@@ -1,0 +1,35 @@
+        <div style="text-align: center">		
+        <div class="laypage-main">
+		{if:"[page:prevlink]"<>""}
+		  <a href="{aspbbs:func:getPageHeader}_[page:prev]{aspbbs:guestConfig.PageSuffix}" class="laypage-prev">上一页</a>
+		{end if}
+		
+		{if:"[page:firstlink]"<>""}
+		  <a href="{aspbbs:sitePath}/" class="laypage-first" title="首页">首页</a>
+		{end if}
+
+		{if:[page:current]>4}
+		  <span>…</span>
+		{end if}
+		
+		{looprs:pagenumber len=5}
+		  {if: [pagenumber:page]=[page:current]}
+			<span class="laypage-curr">[pagenumber:page]</span>
+		  {else}
+			<a href="{aspbbs:func:getPageHeader}_[pagenumber:page]{aspbbs:guestConfig.PageSuffix}">[pagenumber:page]</a>
+		  {end if}
+		{/looprs:pagenumber}
+		  
+		{if:[page:count] - [page:current]>2}
+		  <span>…</span>
+		{end if}	
+
+		{if:"[page:lastlink]"<>""}
+		  <a href="{aspbbs:func:getPageHeader}_[page:count]{aspbbs:guestConfig.PageSuffix}" class="laypage-last" title="尾页">尾页</a>
+		{end if}		
+		  
+		{if:"[page:nextlink]"<>""}
+		  <a href="{aspbbs:func:getPageHeader}_[page:next]{aspbbs:guestConfig.PageSuffix}" class="laypage-next">下一页</a>
+		{end if}  
+		</div>		  
+        </div>

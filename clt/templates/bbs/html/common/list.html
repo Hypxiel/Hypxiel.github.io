@@ -1,0 +1,37 @@
+        <ul class="fly-list">  
+		  {aspbbs:looprs data=thread page=1}
+          <li>
+            <a href="[looprs:UserID func=getUserULink(@me)]" class="fly-avatar">
+              <img src="[looprs:Avatar]" alt="[looprs:Nickname default=@LoginName]">
+            </a>
+            <h2>
+              <a class="layui-badge" href="{aspbbs:indexprefix}thread_list_[looprs:SortID]{aspbbs:guestConfig.PageSuffix}">[looprs:SortID func=getSortName(@me)]</a>
+              <a href="[looprs:TopicID func=getThreadLink(@me)]">[looprs:Content func=iif( inStr(@me , "src=") > 0 , "<i class='layui-icon' style='color:#5FB878'>&#xe64a;</i>" ,"" )] [looprs:Title]</a>
+            </h2>
+            <div class="fly-list-info">
+              <a href="{aspbbs:sitepath}/?c=Bbs--thread&a=Search&UserID=[looprs:UserID]" link>
+                <cite>[looprs:Nickname default=@LoginName]</cite>
+                {if: [looprs:GroupID]=1 and $_S.IsAdmin = 1}<i class="layui-badge fly-badge-vip">管理员</i>{end if}
+                {if: [looprs:GroupID]=($guestConfig).VIPID}<i class="layui-badge fly-badge-vip">VIP</i>{end if}
+              </a>
+              <a href="{aspbbs:sitepath}/?c=Bbs--thread&a=Search&date=[looprs:AddTime style=YYYY-MM-DD]" link>[looprs:AddTime func=POP_MVC.DateStr(@me)]</a>
+              
+              <span class="fly-list-kiss layui-hide-xs" title="{aspbbs:guestConfig.RewardTitle}">{aspbbs:guestConfig.ExperienceIcon} [looprs:AnswerReward default=0]</span>
+			  {if: "[looprs:IsSolved]" = "1"}
+              <span class="layui-badge fly-badge-accept layui-hide-xs">已结</span>
+			  {end if}
+              <a class="fly-list-nums" href="[looprs:TopicID func=getThreadLink(@me)]#flyReply" link> 
+                <i class="iconfont icon-pinglun1" title='查看回帖:[looprs:Title func:POP_MVC.String.jsonEncode(@me)]'></i> [looprs:ReplyCount]
+              </a>
+            </div>
+            <div class="fly-list-badge">
+				{if: "[looprs:IsTop]" = "1"}
+              <span class="layui-badge layui-bg-black">置顶</span>
+			    {end if}
+				{if: "[looprs:IsFeatured]" = "1"}
+              <span class="layui-badge layui-bg-red">精帖</span>
+			    {end if}
+            </div>
+          </li>
+		  {/aspbbs:looprs}
+        </ul>

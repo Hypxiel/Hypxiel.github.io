@@ -1,0 +1,43 @@
+<div class="fly-footer">
+  <p><a href="{aspbbs:homepage}" target="_blank">{aspbbs:guestConfig.SiteName} </a> {aspbbs:guestConfig.CopyRight}</p>
+  
+  <p>
+	{aspbbs:looparr data=$_C.LINKS_TITLE key=$_C.LINKS_LINK}
+    <a href="[looparr:key]" target="_blank">[looparr:data]</a>
+	{/aspbbs:looparr}
+  </p>
+  
+  <p>
+  {if: "{aspbbs:guestConfig.CompanyICP}" <> ""}
+  <a href="https://beian.miit.gov.cn/" target="_blank">{aspbbs:guestConfig.CompanyICP}</a>
+  {end if}
+  
+  {if: "{aspbbs:guestConfig.CompanyICP2}" <> ""}
+  <a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode={aspbbs:func:POP_MVC.String.reg_fetch($guestConfig.CompanyICP2,"\d+","")}" target="_blank">{aspbbs:guestConfig.CompanyICP2}</a>
+  {end if}
+  </p>    
+  
+</div>
+
+<script>
+var ASPBBS = {};
+ASPBBS.ExperienceName = "{aspbbs:guestConfig.ExperienceName}";
+</script>
+
+<script src="{aspbbs:sitetplpath}/res/layui/layui{if:LCase(POP_MVC.get("c"))="bbs--thanks"}-donate{end if}.js"></script>
+<script>
+layui.cache.page = '{aspbbs:layuicachepage}';
+layui.cache.user = {
+  username: '{aspbbs:func:iif(not isNul($_S.adminName),$_S.adminName,"游客")}'
+  ,uid: '{aspbbs:func:iif(not isNul($_S.adminId),$_S.adminId,"-1")}'
+  ,avatar: '{aspbbs:sitetplpath}/res/images/avatar/00.jpg'
+  ,experience: '{aspbbs:func:iif(not isNul($_S.Expirence),$_S.Experience,0)}'
+  ,sex: '{aspbbs:func:iif($_S.Gender=0,女,男)}'
+};
+layui.config({
+  version: "{aspbbs:_C.version}"
+  ,base: '{aspbbs:sitetplpath}/res/mods/'  //这里实际使用时，建议改成绝对路径
+}).extend({
+  fly: 'index'
+}).use('fly');
+</script>

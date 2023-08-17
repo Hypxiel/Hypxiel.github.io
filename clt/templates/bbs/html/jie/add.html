@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>发表问题</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="keywords" content="">
+  <meta name="description" content="">
+{aspbbs:template src=common/link}
+
+<style>
+{if: CheckWap() }
+.note-editing-area img{max-width:30%;}
+{end if}
+</style>
+</head>
+<body>
+
+{aspbbs:template src=common/header_user}
+
+<div class="layui-container fly-marginTop" id="LAY_brain">
+  <div class="fly-panel" pad20 style="padding-top: 5px;">
+    <!--<div class="fly-none">没有权限</div>-->
+    <div class="layui-form layui-form-pane">
+      <div class="layui-tab layui-tab-brief" lay-filter="user">
+        <ul class="layui-tab-title">
+          <li class="layui-this">发表新帖</li>
+        </ul>
+        <div class="layui-form layui-tab-content" id="LAY_ucm" style="padding: 20px 0;">
+          <div class="layui-tab-item layui-show">
+            <form action="{aspbbs:indexprefix}bbs--Topic_doAdd" method="post">
+              <div class="layui-row layui-col-space15 layui-form-item">
+                <div class="layui-col-md3">
+                  <label class="layui-form-label">所在专栏</label>
+                  <div class="layui-input-block">
+                    <select name="SortID" lay-filter="column"> 
+                      <option></option> 
+					  {if: $_S.IsAdmin=1}
+					 {aspbbs:looparr data=$_C.ADMIN_SORT_NAME key=$_C.ADMIN_SORT_ID}
+                      <option value="[looparr:key]" [looparr:i selected=1]>[looparr:data]</option>
+					  {/aspbbs:looparr} 
+					  {end if}
+					  {aspbbs:looparr data=$_C.USER_SORT_NAME key=$_C.USER_SORT_ID}
+                      <option value="[looparr:key]" {if: $_S.IsAdmin<>1}[looparr:i selected=1]{end if}>[looparr:data]</option>
+					  {/aspbbs:looparr} 
+                    </select>
+                  </div>
+                </div>
+                <div class="layui-col-md9">
+                  <label for="L_title" class="layui-form-label">标题</label>
+                  <div class="layui-input-block">
+                    <input type="text" id="L_title" name="Title" required lay-verify="required" autocomplete="off" class="layui-input">
+                    <!-- <input type="hidden" name="id" value="{{d.edit.id}}"> -->
+                  </div>
+                </div>
+              </div>
+              <div class="layui-form-item layui-form-text">
+                <div class="layui-input-block">
+                  <textarea id="L_content" name="Content" required lay-verify="required" placeholder="详细描述" class="layui-textarea" 
+				  style="height:{if:checkwap()}150{else}300{end if}px;" 
+				  {if:checkWap()}toolbar="{aspbbs:guestConfig.EditorToolMobile}"{end if}
+				  ></textarea>
+				  {aspbbs:summernote}
+                </div>
+              </div>
+              <div class="layui-form-item">
+                <div class="layui-inline">
+                  <label class="layui-form-label">{aspbbs:guestConfig.RewardTitle}</label>
+                  <div class="layui-input-inline" style="width: 190px;">
+                    <select name="AnswerReward">
+					  {aspbbs:looparr data=$ThreadAnswerReward}
+                      <option value="[looparr:data]">[looparr:data]</option>
+					  {/aspbbs:looparr}
+                    </select>
+                  </div>
+                  <div class="layui-form-mid layui-word-aux">发表后无法更改{aspbbs:guestConfig.ExperienceName}</div>
+                </div>
+              </div>
+			   {if: "{aspbbs:guestConfig.ThreadVerify}"="1" AND $_S.IsAdmin<>1 AND not checkwap()}
+              <div class="layui-form-item">
+                <label for="L_vercode" class="layui-form-label">图形码</label>
+                <div class="layui-input-inline">
+                  <input type="text" id="L_vercode" name="verify" required lay-verify="required" placeholder="请回答后面的验证码" autocomplete="off" class="layui-input">
+                </div>
+                <div class="layui-form-mid">
+                  <span style="color: #c00;">{aspbbs:checkimg}</span>
+                </div>
+              </div>
+			  {end if}
+              <div class="layui-form-item">
+                <button class="layui-btn" lay-filter="*" lay-submit>立即发布</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{aspbbs:template src=self/footer}
+
+</body>
+</html>

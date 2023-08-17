@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html style="background-color: #e2e2e2;">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>发现 {aspbbs:C_.CMS_NAME} {aspbbs:theYear} 年度最佳案例</title>
+  <meta name="keywords" content="{aspbbs:guestConfig.SiteKeyWords}">
+  <meta name="description" content="{aspbbs:guestConfig.SiteDesc}">  
+{aspbbs:template src=common/link}
+  <style>
+  .header{border-bottom: 1px solid #404553; border-right: 1px solid #404553;}
+  </style>
+</head>
+<body class="fly-full">
+
+{aspbbs:template src=common/header_user}
+
+<div class="fly-case-header">
+	<p class="fly-case-year">{aspbbs:theYear}</p>
+	<p class="fly-case-header-desc"> <a href="{aspbbs:indexprefix}case_{aspbbs:theYear}{aspbbs:guestConfig.PageSuffix}"> 发现年度最佳 layui 案例 </a> </p>
+  <div class="fly-case-btn">
+    <a href="javascript:;" class="layui-btn layui-btn-big fly-case-active" data-type="push">提交案例</a>
+    <a href="{aspbbs:mycaseUrl}{aspbbs:guestConfig.PageSuffix}" class="layui-btn layui-btn-primary layui-btn-big">我的案例</a>
+
+    <a href="{aspbbs:func:getThreadLink(4)}" target="_blank" style="padding: 0 15px; text-decoration: underline">案例要求</a>
+
+  </div>
+</div>
+
+<div class="fly-main" style="overflow: hidden;">
+
+  <ul class="fly-case-list">
+	{aspbbs:looprs data=case page=1}
+    <li data-id="[looprs:TopicID]">
+      <a class="fly-case-img" href="[looprs:ContentSource]" target="_blank" >
+        <img src="[looprs:IndexImage]" alt="[looprs:Title]">
+        <cite class="layui-btn layui-btn-primary layui-btn-small">去围观</cite>
+      </a>
+      <h2><a href="[looprs:ContentSource]" target="_blank">[looprs:Title]</a></h2>
+      <p class="fly-case-desc">[looprs:Content]</p>
+      <div class="fly-case-info">
+        <a href="[looprs:UserID func=getUserULink(@me)]" class="fly-case-user" target="_blank"><img src="[looprs:UserID func=B_("User").where(@me).field("Avatar").getOne]"></a>
+        <p class="layui-elip" style="font-size: 12px;"><span style="color: #666;">[looprs:Nickname]</span> [looprs:AddTime func=POP_MVC.DateStr(@me)]</p>
+        <p>获得<a class="fly-case-nums fly-case-active" href="javascript:;" data-type="showPraise" style=" padding:0 5px; color: #01AAED;">[looprs:ZanCount]</a>个赞</p>
+        <button class="layui-btn layui-btn-primary fly-case-active case-right-btn" data-type="praise">点赞</button>
+        <!-- <button class="layui-btn  fly-case-active" data-type="praise">已赞</button> -->
+      </div>
+    </li>
+	{/aspbbs:looprs}
+  </ul>
+  
+		{if: "[page:total]" = "0"}
+        <blockquote class="layui-elem-quote layui-quote-nm">暂无{aspbbs:theYear}年度 的案例</blockquote>
+		{end if}
+    
+		{aspbbs:template src=common/pagelist}
+
+
+</div>
+
+{aspbbs:template src=self/footer}
+<script>layui.use('form',function(form){form.on('select(change-case-year)',function(obj){location.href ='?bbs--case_user_'+ obj.value + '{aspbbs:guestConfig.PageSuffix}' ;});});</script>
+</body>
+</html>

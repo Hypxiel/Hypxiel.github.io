@@ -1,0 +1,31 @@
+  <div class="fly-panel fly-column">
+    <div class="layui-container">
+      <ul class="layui-clear">
+        <li class='layui-hide-xs{if: "0"="{aspbbs:sortid}" and ""="{aspbbs:_GET.id}"} layui-this{end if}'><a href="{aspbbs:homepage}">首页</a></li> 
+	  {aspbbs:looparr data=$_C.USER_SORT_ID key=$_C.USER_SORT_NAME}
+      <li{if: "[looparr:key]"="{aspbbs:_GET.id}"} class="layui-this"{end if}><a href="[looparr:data func=getSortsLink(@me)]">[looparr:key]</a></li> 
+	  {/aspbbs:looparr}
+	  {aspbbs:looparr data=$_C.ADMIN_SORT_ID key=$_C.ADMIN_SORT_NAME}
+      <li{if: "[looparr:key]"="{aspbbs:_GET.id}"} class="layui-this"{end if}><a href="[looparr:data func=getSortsLink(@me)]">[looparr:key]</a></li> 
+	  {/aspbbs:looparr}
+        <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><span class="fly-mid"></span></li> 
+	    {if: $_S.IsAdmin <> "" }        
+        <!-- 用户登入后显示 -->
+        <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><a href="{aspbbs:indexprefix}bbs--user{aspbbs:guestConfig.PageSuffix}#index">我发表的贴</a></li> 
+        <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><a href="{aspbbs:indexprefix}bbs--user{aspbbs:guestConfig.PageSuffix}#collection">我收藏的贴</a></li> 
+		{end if}
+      </ul> 
+      
+
+      <div class="fly-column-right layui-hide-xs"> 
+		{if: $guestConfig.SearchAllow  = 1 or $_S.IsAdmin = 1}
+        <span class="fly-search"><i class="layui-icon"></i></span> 
+		{end if}
+        <a href="{aspbbs:func:getPostLink}" class="layui-btn">发表新帖</a> 
+      </div> 
+      <div class="layui-hide-sm layui-show-xs-block" style="margin-top: -10px; padding-bottom: 10px; text-align: center;"> 
+        <a href="{aspbbs:func:getPostLink}" class="layui-btn">发表新帖</a> 
+      </div> 
+	  
+    </div>
+  </div>

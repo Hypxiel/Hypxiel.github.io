@@ -1,0 +1,21 @@
+{//这儿设置网页顶部的导航}
+	<a class="fly-logo" href="{aspbbs:homepage}" style="color:#5FB878;font-size:150%;line-height:40px;" >
+		{aspbbs:guestConfig.SiteName}
+      <!-- <img src="{aspbbs:sitetplpath}/res/images/logo.png" alt="{aspbbs:_C.CMS_NAME}"> -->
+    </a>
+    <ul class="layui-nav fly-nav layui-hide-xs">
+	  {/*
+      <li class="layui-nav-item layui-this">
+        <a href="{aspbbs:homepage}"><i class="iconfont icon-jiaoliu"></i>交流</a>
+      </li>
+	  */}
+      <li class="layui-nav-item">
+        <a href="{aspbbs:indexprefix}case{aspbbs:guestConfig.PageSuffix}"><i class="iconfont icon-iconmingxinganli"></i>案例</a>
+      </li>
+      <li class="layui-nav-item">
+        <a href="http://www.popasp.com/" target="_blank"><i class="iconfont icon-ui"></i>框架</a>
+      </li>
+      <li class="layui-nav-item">
+        <a href="{aspbbs:indexprefix}sitemap{aspbbs:guestConfig.PageSuffix}" target="_blank"><i class="layui-icon">&#xe7ae;</i>网站地图</a>
+      </li>
+    </ul>

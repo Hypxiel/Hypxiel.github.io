@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>捐赠信息确认 - {aspbbs:guestConfig.SiteName}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+{aspbbs:template src=common/link}
+</head>
+<body>
+
+{aspbbs:template src=common/header_user}
+
+<div class="layui-container fly-marginTop fly-user-main">
+{aspbbs:template src=common/user-nav}
+  
+  
+  <div class="fly-panel fly-panel-user" pad20>
+    <div class="layui-tab layui-tab-brief" lay-filter="user">
+      <ul class="layui-tab-title" id="LAY_mine">
+        <li class="layui-this" lay-id="info">确认添加</li>
+        <li lay-id="avatar">所有</li>
+      </ul>
+      <div class="layui-tab-content" style="padding: 20px 0;">
+        <div class="layui-form layui-form-pane layui-tab-item layui-show">
+          <form method="post" action="{aspbbs:indexprefix}bbs--Donate_DoConfirm">
+			
+			<div class="layui-form-item">
+			  <label for="L_Amount" class="layui-form-label" title="金额">金额</label>
+			  <div class="layui-input-inline">
+				<input type="text" id="L_Amount" name="Amount" autocomplete="off" value="{aspbbs:pay.Amount}" class="layui-input">
+			  </div>
+			</div>
+			
+			<div class="layui-form-item">
+			  <label for="L_DealMethod" class="layui-form-label" title="支付方式">支付方式</label>
+			  <div class="layui-input-inline">
+				<input type="text" id="L_DealMethod" name="DealMethod" autocomplete="off" value="{aspbbs:pay.DealMethod}" class="layui-input">
+			  </div>
+			</div>
+			
+			<div class="layui-form-item">
+			  <label for="L_FromUser" class="layui-form-label" title="来自">来自</label>
+			  <div class="layui-input-inline">
+				<input type="text" id="L_FromUser" name="FromUser" autocomplete="off" value="{aspbbs:pay.FromUser}" class="layui-input">
+			  </div>
+			</div>
+			
+			<div class="layui-form-item">
+			  <label for="L_FromUser" class="layui-form-label" title="支付时间">支付时间</label>
+			  <div class="layui-input-inline">
+				<input type="text" id="L_FromUser" name="DealTime" autocomplete="off" value="{aspbbs:pay.DealTime}" class="layui-input">
+			  </div>
+			</div>
+			
+			<div class="layui-form-item">
+			  <label for="L_DealNo" class="layui-form-label" title="订单号">订单号</label>
+			  <div class="layui-input-inline">
+				<input type="text" id="L_DealNo" name="DealNo" autocomplete="off" value="{aspbbs:pay.DealNo}" class="layui-input">
+			  </div>
+			</div>
+			
+			<div class="layui-form-item layui-form-text">
+			  <label for="L_PayInfo" class="layui-form-label" title="备注">备注</label>
+			  <div class="layui-input-block">
+				<textarea placeholder="" id="L_PayInfo"  name="PayInfo" autocomplete="off" class="layui-textarea" style="height: 80px;">{aspbbs:pay.PayInfo}</textarea>
+			  </div>
+			</div>
+			
+			<div class="layui-form-item layui-form-text" style="display:none">
+			  <label for="L_DonateInfo" class="layui-form-label" title="账单所有信息(粘贴到这儿)">账单所有信息(粘贴到这儿)</label>
+			  <div class="layui-input-block">
+				<textarea placeholder="" id="L_DonateInfo"  name="DonateInfo" autocomplete="off" class="layui-textarea" style="height: 80px;">{aspbbs:_S.DonateInfo}</textarea>
+			  </div>
+			</div>
+			
+			<hr class="layui-bg-orange">
+            <div class="layui-form-item">
+              <button class="layui-btn" key="set-mine" lay-filter="*" lay-submit>确认添加</button>
+            </div>
+		 </form>
+          </div>
+		  
+		  
+          
+        <div class="layui-tab-item">
+          <ul class="mine-view jie-row">
+			{aspbbs:looprs data=collection}
+            <li>
+              <a class="jie-title" href="[looprs:TopicID func=getThreadLink(@me)]" target="_blank">[looprs:Title]</a>
+              <em>[looprs:Visits]阅/[looprs:ReplyCount]答</em>
+			</li>
+			{/aspbbs:looprs}
+          </ul>
+          <div id="LAY_page1"></div>
+        </div>
+	  
+		  
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+{aspbbs:template src=self/footer}
+<script>
+function photoCompress(file, w, objDiv) {
+    var ready = new FileReader();
+    /*开始读取指定的Blob对象或File对象中的内容. 当读取操作完成时,readyState属性的值会成为DONE,如果设置了onloadend事件处理程序,则调用之.同时,result属性中将包含一个data: URL格式的字符串以表示所读取文件的内容.*/
+    ready.readAsDataURL(file);
+    ready.onload = function() {
+        var re = this.result;
+        canvasDataURL(re, w, objDiv);
+    }
+};
+function canvasDataURL(path, obj, callback) {
+    var img = new Image();
+    img.src = path;
+    img.onload = function() {
+        var that = this;
+        // 默认按比例压缩
+        var w = that.width,
+            h = that.height,
+            scale = w / h;
+        w = obj.width || w;
+        h = obj.height || (w / scale);
+        var quality = 0.5; // 默认图片质量为0.7
+        //生成canvas
+        var canvas = document.createElement('canvas');
+        var ctx = canvas.getContext('2d');
+        // 创建属性节点
+        var anw = document.createAttribute("width");
+        anw.nodeValue = w;
+        var anh = document.createAttribute("height");
+        anh.nodeValue = h;
+        canvas.setAttributeNode(anw);
+        canvas.setAttributeNode(anh);
+        ctx.drawImage(that, 0, 0, w, h);
+        // 图像质量
+        if(obj.quality && obj.quality <= 1 && obj.quality > 0) {
+            quality = obj.quality;
+        }
+        // quality值越小，所绘制出的图像越模糊
+        var base64 = canvas.toDataURL('image/jpeg', quality);
+        // 回调函数返回base64的值
+        callback(base64);
+    }
+}
+function convertBase64UrlToBlob(urlData) {
+    var arr = urlData.split(','),
+        mime = arr[0].match(/:(.*?);/)[1],
+        bstr = atob(arr[1]),
+        n = bstr.length,
+        u8arr = new Uint8Array(n);
+    while(n--) {
+        u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new Blob([u8arr], {
+        type: mime
+    });
+}
+layui.use('upload', function(){
+  var $ = layui.jquery
+  ,upload = layui.upload;
+  
+  //普通图片上传
+  var uploadInst = upload.render({
+    elem: '.iaspcms-siteconfig-upload'
+    ,url: '?bbs--manage_uploadAvatar' //改成您自己的上传接口
+    ,before: function(obj){
+		var item = this.item;
+      //预读本地文件示例，不支持ie8
+      obj.preview(function(index, file, result){
+		$(item).siblings(".layui-upload-list").find('img').attr('src', result); //图片链接（base64）
+      });
+    }
+    ,done: function(res){
+      //如果上传失败
+      if(res.status > 0){
+        return layer.msg(res.msg);
+      } else { //上传成功
+		var item = this.item;
+		$(item).siblings(".iaspcms-siteconfig-input").val( res.msg );
+	  }
+     
+    }
+  });
+  });
+  
+layui.use('upload', function(){
+  var $ = layui.jquery
+  ,upload = layui.upload;
+  
+  //普通图片上传
+  var uploadInst = upload.render({
+    elem: '.iaspcms-siteconfig-uploads'
+    ,url: '?bbs--manage_uploads' //改成您自己的上传接口
+    ,before: function(obj){
+		var item = this.item;
+      //预读本地文件示例，不支持ie8
+      obj.preview(function(index, file, result){
+		$(item).siblings(".layui-upload-list").find('img').attr('src', result); //图片链接（base64）
+      });
+    }
+    ,done: function(res){
+      //如果上传失败
+      if(res.status > 0){
+        return layer.msg(res.msg);
+      } else { //上传成功
+		var item = this.item;
+		$(item).siblings(".iaspcms-siteconfig-textarea").val( $(item).siblings(".iaspcms-siteconfig-textarea").val() + ',' + res.msg );
+	  }
+     
+    }
+  });
+  });
+</script>
+</body>
+</html>

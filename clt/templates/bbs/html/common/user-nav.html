@@ -1,0 +1,72 @@
+<ul class="layui-nav layui-nav-tree layui-inline" lay-filter="user">
+	<li class="layui-nav-item">
+	  <a href="{aspbbs:indexprefix}u_{aspbbs:_S.adminId}">
+		<i class="layui-icon">&#xe609;</i>
+		我的主页
+	  </a>
+	</li>
+	<li class='layui-nav-item{if: LCase(POP_MVC.a)="index"} layui-this{end if}'>
+	  <a href="{aspbbs:indexprefix}bbs--user{aspbbs:guestConfig.PageSuffix}">
+		<i class="layui-icon">&#xe612;</i>
+		用户中心
+	  </a>
+	</li>
+	<li class='layui-nav-item{if: LCase(POP_MVC.c)="bbs--user" and LCase(POP_MVC.a)="settings"} layui-this{end if}'>
+	  <a href="{aspbbs:indexprefix}bbs--user_settings{aspbbs:guestConfig.PageSuffix}">
+		<i class="layui-icon">&#xe620;</i>
+		基本设置
+	  </a>
+	</li>
+	<li class='layui-nav-item{if: LCase(POP_MVC.c)="bbs--user" and LCase(POP_MVC.a)="message"} layui-this{end if}'>
+	  <a href="{aspbbs:indexprefix}bbs--user_message{aspbbs:guestConfig.PageSuffix}">
+		<i class="layui-icon">&#xe611;</i>
+		我的消息
+	  </a>
+	</li>
+{if: $_S.IsAdmin = 1 }
+	<li class='layui-nav-item{if1: LCase(POP_MVC.a)="configs"} layui-this{end if1}'>
+	  <a href="{aspbbs:indexprefix}bbs--manage_configs{aspbbs:guestConfig.PageSuffix}">
+		<i class="layui-icon">&#xe7ae;</i>
+		网站配置
+	  </a>
+	</li>
+	
+	<li class='layui-nav-item{if1: LCase(POP_MVC.c)="bbs--system"} layui-this{end if1}'>
+	  <a href="{aspbbs:indexprefix}bbs--system_settings{aspbbs:guestConfig.PageSuffix}">
+		<i class="layui-icon">&#xe620;</i>
+		系统管理
+	  </a>
+	</li>
+	
+	<li class='layui-nav-item{if1: LCase(POP_MVC.c)="bbs--user" and LCase(POP_MVC.a)="list"} layui-this{end if1}'>
+	  <a href="{aspbbs:indexprefix}bbs--user_list{aspbbs:guestConfig.PageSuffix}">
+		<i class="layui-icon">&#xe770;</i>
+		用户管理
+	  </a>
+	</li>
+	
+	<li class='layui-nav-item{if1: LCase(POP_MVC.c)="bbs--donate"} layui-this{end if1}'>
+	  <a href="{aspbbs:indexprefix}bbs--Donate_AddDonate{aspbbs:guestConfig.PageSuffix}">
+		<i class="layui-icon">&#xe65e;</i>
+		捐赠管理
+	  </a>
+	</li>
+	
+	<li class='layui-nav-item{if1: LCase(POP_MVC.a)="audit0"} layui-this{end if1}'>
+	  <a href="{aspbbs:indexprefix}bbs--case_audit0{aspbbs:guestConfig.PageSuffix}">
+		<i class="layui-icon">&#xe663;</i>
+		案例管理
+	  </a>
+	</li>
+{end if}
+</ul>
+
+<div class="site-tree-mobile layui-hide">
+  <i class="layui-icon">&#xe602;</i>
+</div>
+<div class="site-mobile-shade"></div>
+
+<div class="site-tree-mobile layui-hide">
+  <i class="layui-icon">&#xe602;</i>
+</div>
+<div class="site-mobile-shade"></div>

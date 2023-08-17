@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>按日期搜索 - {aspbbs:guestConfig.SiteName}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="keywords" content="{aspbbs:guestConfig.SiteKeyWords}">
+  <meta name="description" content="{aspbbs:guestConfig.SiteDesc}">
+{aspbbs:template src=common/link}
+</head>
+<body>
+
+{aspbbs:template src=common/header}
+
+
+<div class="layui-container">
+  <div class="layui-row layui-col-space15">
+    <div class="layui-col-md8">
+      <div class="fly-panel" style="margin-bottom: 0;">
+        {aspbbs:template src=common/filter}
+        {aspbbs:template src=common/list}
+        
+		{if: [page:total] = 0}
+        <div class="fly-none">没有相关数据</div>
+		{end if}
+    
+        <div style="text-align: center">		
+        <div class="laypage-main">
+		{if:"[page:prevlink]"<>""}
+		  <a href="{aspbbs:indexprefix}c={aspbbs:func:POP_MVC.c}&a={aspbbs:func:POP_MVC.a}&page=[page:prev]&date={aspbbs:_REQ.date}" class="laypage-prev">上一页</a>
+		{end if}
+		
+		{if:"[page:firstlink]"<>""}
+		  <a href="{aspbbs:indexprefix}c={aspbbs:func:POP_MVC.c}&a={aspbbs:func:POP_MVC.a}&date={aspbbs:_REQ.date}" class="laypage-first" title="首页">首页</a>
+		{end if}
+
+		{if:[page:current]>4}
+		  <span>…</span>
+		{end if}
+		
+		{looprs:pagenumber len=5}
+		  {if: [pagenumber:page]=[page:current]}
+			<span class="laypage-curr">[pagenumber:page]</span>
+		  {else}
+			<a href="{aspbbs:indexprefix}c={aspbbs:func:POP_MVC.c}&a={aspbbs:func:POP_MVC.a}&page=[pagenumber:page]&date={aspbbs:_REQ.date}">[pagenumber:page]</a>
+		  {end if}
+		{/looprs:pagenumber}
+		  
+		{if:[page:count] - [page:current]>2}
+		  <span>…</span>
+		{end if}	
+
+		{if:"[page:lastlink]"<>""}
+		  <a href="{aspbbs:indexprefix}c={aspbbs:func:POP_MVC.c}&a={aspbbs:func:POP_MVC.a}&page=[page:count]&date={aspbbs:_REQ.date}" class="laypage-last" title="尾页">尾页</a>
+		{end if}		
+		  
+		{if:"[page:nextlink]"<>""}
+		  <a href="{aspbbs:indexprefix}c={aspbbs:func:POP_MVC.c}&a={aspbbs:func:POP_MVC.a}&page=[page:next]&date={aspbbs:_REQ.date}" class="laypage-next">下一页</a>
+		{end if}  
+		</div>		  
+        </div>
+      </div>
+    </div>
+    <div class="layui-col-md4">
+      {aspbbs:template src=common/hotThread}
+	  
+      {aspbbs:template src=common/right-ad}
+    </div>
+  </div>
+</div>
+
+{aspbbs:template src=self/footer}
+
+</body>
+</html>

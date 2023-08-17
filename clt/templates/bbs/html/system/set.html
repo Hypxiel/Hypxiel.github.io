@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>系统管理 - {aspbbs:guestConfig.SiteName}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+{aspbbs:template src=common/link}
+</head>
+<body>
+
+{aspbbs:template src=common/header_user}
+
+<div class="layui-container fly-marginTop fly-user-main">
+{aspbbs:template src=common/user-nav}
+  
+  
+  <div class="fly-panel fly-panel-user" pad20>
+    <div class="layui-tab layui-tab-brief" lay-filter="user">
+      <ul class="layui-tab-title" id="LAY_mine">
+        <li class="layui-this" lay-id="InitDataBase">初始化<span class="layui-hide-xs">与压缩</span></li>
+        <li lay-id="ImportDataBase">旧版导入</li>
+        <li lay-id="db2db">数据<span class="layui-hide-xs">库</span>转换</li>
+        <li lay-id="switchDb">数据<span class="layui-hide-xs">库</span>切换</li>
+        <li lay-id="dbRestore">使用备份</li>
+        <li lay-id="SystemSafe">安全策略</li>
+        <li lay-id="redundancy">冗余文件<span class="layui-hide-xs">检测</span></li>
+        <li lay-id="emptyFolder">空文件夹<span class="layui-hide-xs">检测</span></li>
+      </ul>
+      <div class="layui-tab-content" style="padding: 20px 0;">
+        <div class="layui-form layui-form-pane layui-tab-item layui-show">
+            <ul class="app-bind">
+              <li class="fly-msg app-havebind">                
+                <span>当前使用的是 {aspbbs:func:$_C.DB_TYPE} 数据库，数据库为 {aspbbs:func:iif( $_C.DB_TYPE = "mysql" , $_C.DB_NAME ,  $_C.DB_PATH )} ，如果想清空数据库，可以点击 </span><a href="javascript:;" class="acc-InitDataBase" type="{aspbbs:func:$_C.DB_TYPE}">初始化数据库</a> 
+              </li>
+              <li class="fly-msg">
+                <img src="{aspbbs:sitepath}/static/images/access.png" style="width:25px">
+                <a href="javascript:;" class="acc-CompressAccess" type="access" dbName="#aspbbs#.mdb"> access 数据库压缩</a>
+                <span> ( {aspbbs:accInfo} )，access数据库支持压缩功能，压缩后体积变小，运行更快！</span>
+              </li>
+			  
+              <li class="fly-msg">
+                <img src="{aspbbs:sitepath}/static/images/access.png" style="width:25px">
+                <a href="javascript:;" class="acc-DbBackup" type="access" dbName="#aspbbs#.mdb"> access 数据库备份</a>
+              </li>
+			  
+              <li class="fly-msg">
+                <img src="{aspbbs:sitepath}/static/images/sqlite.png" style="width:25px">
+                <a href="javascript:;" class="acc-DbBackup" type="sqlite3" dbName="#aspbbs#.db"> sqlite3 数据库备份</a>
+              </li>
+            </ul>
+          </div>
+		  
+		  
+          
+          <div class="layui-form layui-form-pane layui-tab-item">
+            <ul class="app-bind">
+              <li class="fly-msg app-havebind">                
+                <span>当前使用的是 {aspbbs:func:$_C.DB_TYPE} 数据库，access与sqlite3将旧版数据库复制到网站目录下面，导入可能需要几分钟时间，请耐心等待。 </span>
+              </li>
+			  
+              <li class="fly-msg">
+                <img src="{aspbbs:sitepath}/static/images/access.png" style="width:25px">
+                <a href="javascript:;" class="acc-ImportDataBase" type="access" dbName="#aspbbs#.mdb"> access 数据库导入</a>
+                <span>，使用网站目录下面的 #aspbbs#.mdb 文件导入</span>
+              </li>
+			  
+              <li class="fly-msg">
+                <img src="{aspbbs:sitepath}/static/images/sqlite.png" style="width:25px">
+                <a href="javascript:;" class="acc-ImportDataBase" type="sqlite3" dbName="#aspbbs#.db"> sqlite3 数据库导入</a>
+                <span>，使用网站目录下面的 #aspbbs#.db 文件导入</span>
+              </li>
+			  
+              <li class="fly-msg">
+                <img src="{aspbbs:sitepath}/static/images/mysql.png" style="width:25px">
+                <a href="javascript:;" class="acc-ImportDataBase" type="mysql" dbName="{aspbbs:func:$_C.DB_NAME}"> mysql 数据库导入</a>
+                <span>，配置中的库名为新版库名，旧版库名请在弹出层填入</span>
+              </li>
+			  
+              <li class="fly-msg app-havebind">                
+                <span>从配置数据库导入，即按项目设置的数据库导入，注意：当前数据库不能导入自己。 </span>
+              </li>
+			  {if: C_("DB_TYPE")="access" }
+              <li class="fly-msg">
+                <img src="{aspbbs:sitepath}/static/images/sqlite.png" style="width:25px">
+                <a href="javascript:;" class="acc-ImportDataBase" type="sqlite3" dbName='{aspbbs:func:C_("CORE_NAME") & "/" & C_("DATA_NAME") & "/#aspbbs#.db"}'> sqlite3 数据库导入</a>
+                <span>，使用 {aspbbs:func:C_("CORE_NAME") & "/" & C_("DATA_NAME") & "/#aspbbs#.db"} 导入</span>
+              </li>			  
+              <li class="fly-msg">
+                <img src="{aspbbs:sitepath}/static/images/mysql.png" style="width:25px">
+                <a href="javascript:;" class="acc-ImportDataBase" type="mysql" dbName="{aspbbs:func:$_C.DB_NAME}"> mysql 数据库导入</a>
+                <span>，使用MySQL数据库 {aspbbs:func:$_C.DB_NAME} 导入</span>
+              </li>
+			  {end if}
+			  
+			  {if: C_("DB_TYPE")="sqlite3" }
+              <li class="fly-msg">
+                <img src="{aspbbs:sitepath}/static/images/access.png" style="width:25px">
+                <a href="javascript:;" class="acc-ImportDataBase" type="access" dbName="'{aspbbs:func:C_("CORE_NAME") & "/" & C_("DATA_NAME") & "/#aspbbs#.mdb"}"> access 数据库导入</a>
+                <span>，使用 {aspbbs:func:C_("CORE_NAME") & "/" & C_("DATA_NAME") & "/#aspbbs#.mdb"} 导入</span>
+              </li>		  
+              <li class="fly-msg">
+                <img src="{aspbbs:sitepath}/static/images/mysql.png" style="width:25px">
+                <a href="javascript:;" class="acc-ImportDataBase" type="mysql" dbName="{aspbbs:func:$_C.DB_NAME}"> mysql 数据库导入</a>
+                <span>，使用MySQL数据库 {aspbbs:func:$_C.DB_NAME} 导入</span>
+              </li>
+			  {end if}
+			  
+			  {if: C_("DB_TYPE")="mysql" }
+              <li class="fly-msg">
+                <img src="{aspbbs:sitepath}/static/images/access.png" style="width:25px">
+                <a href="javascript:;" class="acc-ImportDataBase" type="access" dbName="'{aspbbs:func:C_("CORE_NAME") & "/" & C_("DATA_NAME") & "/#aspbbs#.mdb"}"> access 数据库导入</a>
+                <span>，使用 {aspbbs:func:C_("CORE_NAME") & "/" & C_("DATA_NAME") & "/#aspbbs#.mdb"} 导入</span>
+              </li>		  
+              <li class="fly-msg">
+                <img src="{aspbbs:sitepath}/static/images/sqlite.png" style="width:25px">
+                <a href="javascript:;" class="acc-ImportDataBase" type="sqlite3" dbName='{aspbbs:func:C_("CORE_NAME") & "/" & C_("DATA_NAME") & "/#aspbbs#.db"}'> sqlite3 数据库导入</a>
+                <span>，使用 {aspbbs:func:C_("CORE_NAME") & "/" & C_("DATA_NAME") & "/#aspbbs#.db"} 导入</span>
+              </li>	
+			  {end if}
+            </ul>
+          </div>		  
+		  
+          <div class="layui-form layui-form-pane layui-tab-item">
+            <ul class="app-bind">
+              <li class="fly-msg app-havebind">                
+                <span>目前支持 access/sqlite3 数据库转换到 access/sqlite3/mysql 数据库。 </span>
+              </li>
+			  
+              <li class="fly-msg">
+                <img src="{aspbbs:sitepath}/static/images/access.png" style="width:25px">
+                <a href="javascript:;" class="acc-db2db" type="access" dst="sqlite3"> access 到 sqlite3 </a>
+				<img src="{aspbbs:sitepath}/static/images/sqlite.png" style="width:25px">
+              </li>
+			  
+              <li class="fly-msg">
+                <img src="{aspbbs:sitepath}/static/images/access.png" style="width:25px">
+                <a href="javascript:;" class="acc-db2db" type="access" dst="mysql"> access 到 mysql </a>
+				<img src="{aspbbs:sitepath}/static/images/mysql.png" style="width:25px">
+				<span> Mysql数据库配置应首先在config.asp中设置正确</span>
+              </li>
+			  
+              <li class="fly-msg">
+                <img src="{aspbbs:sitepath}/static/images/mysql.png" style="width:25px">
+                <a href="javascript:;" class="acc-db2db" type="mysql" dst="access"> mysql 到 access </a>
+				<img src="{aspbbs:sitepath}/static/images/access.png" style="width:25px">
+				<span> Mysql数据库配置应首先在config.asp中设置正确</span>
+              </li>
+			  
+              <li class="fly-msg">
+                <img src="{aspbbs:sitepath}/static/images/mysql.png" style="width:25px">
+                <a href="javascript:;" class="acc-db2db" type="mysql" dst="sqlite3"> mysql 到 sqlite3 </a>
+				<img src="{aspbbs:sitepath}/static/images/sqlite.png" style="width:25px">
+				<span> Mysql数据库配置应首先在config.asp中设置正确</span>
+              </li>
+			  
+			
+			  <!--
+              <li class="fly-msg">
+                <img src="{aspbbs:sitepath}/static/images/sqlite.png" style="width:25px">
+                <a href="javascript:;" class="acc-db2db" type="sqlite" dst="access"> sqlite3 数据库转换到 access</a>
+				<img src="{aspbbs:sitepath}/static/images/access.png" style="width:25px">
+              </li>
+			  
+              <li class="fly-msg">
+                <img src="{aspbbs:sitepath}/static/images/sqlite.png" style="width:25px">
+                <a href="javascript:;" class="acc-db2db" type="sqlite" dst="mysql"> sqlite3 数据库转换到 mysql</a>
+				<img src="{aspbbs:sitepath}/static/images/mysql.png" style="width:25px">
+              </li>
+			  -->
+            </ul>
+          </div>
+		  
+          <div class="layui-form layui-form-pane layui-tab-item">
+            <ul class="app-bind">
+              <li class="fly-msg app-havebind">                
+                <span>aspbbs支持三种数据库，当前为{aspbbs:func:$_C.DB_TYPE}，根据下面提示进行切换。</span>
+              </li>
+			  
+              <li class="fly-msg">
+                <img src="{aspbbs:sitepath}/static/images/access.png" style="width:25px">
+                <a href="javascript:;" class="acc-switchDb" type="access"> 切换到access </a>
+              </li>
+			  
+              <li class="fly-msg">
+                <img src="{aspbbs:sitepath}/static/images/sqlite.png" style="width:25px">
+                <a href="javascript:;" class="acc-switchDb" type="sqlite3"> 切换到sqlite3 </a>
+              </li>
+			  
+              <li class="fly-msg">
+                <img src="{aspbbs:sitepath}/static/images/mysql.png" style="width:25px">
+                <a href="javascript:;" class="acc-switchDb" type="mysql"> 切换到mysql </a>
+              </li>
+            </ul>
+          </div>
+		  
+        <div class="layui-form layui-form-pane layui-tab-item">
+            <ul class="app-bind">
+              <li class="fly-msg app-havebind">                
+                <span>当前使用的是 {aspbbs:func:$_C.DB_TYPE} 数据库，备份恢复使用的是旧版导入方法实现！</a> 
+              </li>
+			  
+			 {aspbbs:file path=$backupFolder size=50 order=0 ext=mdb|db}
+              <li class="fly-msg">
+                <img src='{aspbbs:sitepath}/static/images/[file:extname func=iif(@me="db","sqlite","access")].png' style="width:25px">
+				<span> [file:extname func=iif(@me="db","sqlite3","access")] </span>
+                <a href="javascript:;" class="acc-ImportDataBase" type='[file:extname func=iif(@me="db","sqlite3","access")]' dbName='[file:filepath]'> 恢复 </a>				
+                <span>，[file:DateCreated style=YYYY-MM-DD HH:II:SS] 备份名 [file:name] ,</span>
+				<a href="javascript:;" class="acc-RemoveDataBase" type='[file:extname func=iif(@me="db","sqlite3","access")]' dbName='[file:filepath]'> 删除 </a>
+              </li>
+			 {/aspbbs:file}
+            </ul>
+          </div>
+		  
+          <div class="layui-form layui-form-pane layui-tab-item">
+            <ul class="app-bind">
+              <li class="fly-msg app-havebind">                
+                <span>通过安全策略，即下面的安全设置，可以极大提高安全性能。</span>
+              </li>
+			  
+              <li class="fly-msg">
+                <a href="javascript:;" class="acc-EditCore" type=""> 修改核心文件夹名</a>
+				<span>核心文件夹名称(当前:{aspbbs:func:POP_MVC.trim(POP_MVC.file.dir(POP_MVC.appPath),"/")})最好是别人猜不到的。</span>
+              </li>
+			  
+              <li class="fly-msg">
+                <a href="javascript:;" class="acc-EditHtml" type=""> 修改模板文件夹html名</a>
+				<span>模板文件夹(当前:{aspbbs:func:setting.HtmlFilePath})改名，可以保护模板文件不被别人下载。</span>
+              </li>
+			  
+			  {if: POP_MVC.trim(POP_MVC.file.dir(POP_MVC.appPath),"/") <> "core" or setting.HtmlFilePath <> "html"}
+              <li class="fly-msg app-havebind">                
+                <span>有时候，我们需要将上面的设置还原成系统初始设置，请按下面提示操作</span>
+              </li>
+			  {end if}
+			   {if: POP_MVC.trim(POP_MVC.file.dir(POP_MVC.appPath),"/") <> "core"}
+              <li class="fly-msg">
+                <a href="javascript:;" class="acc-EditCore" type="core"> 还原核心文件夹名</a>
+				<span>核心文件夹名称(当前:{aspbbs:func:POP_MVC.trim(POP_MVC.file.dir(POP_MVC.appPath),"/")})，可还原成core。</span>
+              </li>
+			  {end if}
+			  {if: setting.HtmlFilePath <> "html"}
+              <li class="fly-msg">
+                <a href="javascript:;" class="acc-EditHtml" type="html"> 还原模板文件夹html名</a>
+				<span>模板文件夹(当前:{aspbbs:func:setting.HtmlFilePath})改名，可还原成html。</span>
+              </li>
+			  {end if}
+            </ul>
+          </div>
+		  
+          <div class="layui-form layui-form-pane layui-tab-item">
+            <ul class="app-bind">
+              <li class="fly-msg app-havebind">    
+				 <a href="javascript:;" onclick="startRedundancy(this)" class=""> 开始检测</a>
+                <span>冗余文件检测用来检测上传时生成的冗余文件，检测完之后，请</span>
+				<a href="javascript:;" onclick="location.reload()" class="" target="_self"> 刷新</a>
+				{if: POP_MVC.file_get_contents(POP_MVC.appPath & "/runtime/redundancy/file.txt") <> "" }
+				<span> ，可以对冗余文件</span>
+				<a href="javascript:;" onclick="clearRedundancy(this)" class=""> 全部清除</a>
+				{end if}
+              </li>
+            </ul>
+			<div id="LAY_tips">
+			{aspbbs:func:V_("loopstr")}
+			</div>
+          </div>
+		  
+          <div class="layui-form layui-form-pane layui-tab-item">
+            <ul class="app-bind">
+              <li class="fly-msg app-havebind">    
+				 <a href="javascript:;" onclick="startEmptyFolder(this)" class=""> 开始检测</a>
+                <span>空文件夹检测可以用来检测上传时生成的空文件夹，检测完之后，请</span>
+				<a href="javascript:;" onclick="location.reload()" class="" target="_self"> 刷新</a>
+				{if: POP_MVC.file_get_contents(POP_MVC.appPath & "/runtime/emptyFolder/file.txt") <> "" }
+				<span> ，可以对空文件夹</span>
+				<a href="javascript:;" onclick="clearEmptyFolder(this)" class=""> 全部清除</a>
+				{end if}
+              </li>
+            </ul>
+			<div id="LAY_tips">
+			{aspbbs:func:V_("emptystr")}
+			</div>
+          </div>
+	  
+		  
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+{aspbbs:template src=self/footer}
+<script>
+layui
+  .$("#LAY_tips tbody tr")
+  .on("mouseenter", function () {
+	if ($(this).find('a').length>0) {
+		this.index = layer.tips(
+		  '<p><img style="width:100%;" src="' + $(this).find('a').attr('href') + '" /></p>',
+		  this,
+		  { time: -1, maxWidth: 400, tips: [3, "#3A3D49"] }
+		);	
+	}
+  })
+  .on("mouseleave", function () {
+	layer.close(this.index);
+  });
+  
+  
+function startRedundancy(){
+	layer.open({
+	  type: 2,
+	  title: '冗余文件检测',
+	  shadeClose: true,
+	  shade: 0.8,
+	  area: ['600px', '400px'],
+	  content: '?bbs--file_redundancy_begin'
+	}); 
+}
+
+function clearRedundancy(){
+	layer.confirm('确认清除全部冗余文件？', function(){
+		location.href="?bbs--file_redundancy_clear";
+	});
+}
+
+function startEmptyFolder(){
+	layer.open({
+	  type: 2,
+	  title: '空文件检测',
+	  shadeClose: true,
+	  shade: 0.8,
+	  area: ['600px', '400px'],
+	  content: '?bbs--file_emptyFolder_begin'
+	}); 
+}
+
+function clearEmptyFolder(){
+	layer.confirm('确认清除全部空文件夹吗？', function(){
+		location.href="?bbs--file_emptyFolder_clear";
+	});
+}
+</script>
+</body>
+</html>

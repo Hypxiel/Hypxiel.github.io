@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>开发者交流 - {aspbbs:guestConfig.SiteName}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="keywords" content="{aspbbs:guestConfig.SiteKeyWords}">
+  <meta name="description" content="{aspbbs:guestConfig.SiteDesc}">
+{aspbbs:template src=common/link}
+</head>
+<body>
+
+{aspbbs:template src=common/header}
+
+
+<div class="layui-container">
+  <div class="layui-row layui-col-space15">
+    <div class="layui-col-md8">
+      <div class="fly-panel" style="margin-bottom: 0;">
+        {aspbbs:template src=common/filter}
+        {aspbbs:template src=common/list}
+        
+		{if: [page:total] = 0}
+        <div class="fly-none">没有相关数据</div>
+		{end if}
+    
+		{aspbbs:template src=common/pagehome}
+      </div>
+    </div>
+    <div class="layui-col-md4">
+      {aspbbs:template src=common/hotThread}
+	  
+      {aspbbs:template src=common/right-ad}
+    </div>
+  </div>
+</div>
+
+{aspbbs:template src=self/footer}
+</body>
+</html>

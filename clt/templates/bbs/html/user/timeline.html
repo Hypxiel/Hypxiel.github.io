@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>{aspbbs:func:iif(isNul($user.NickName) ,$user.LoginName,$user.NickName )} - 用户中心 - {aspbbs:guestConfig.SiteName}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="keywords" content="{aspbbs:guestConfig.SiteKeyWords}">
+  <meta name="description" content="{aspbbs:guestConfig.SiteDesc}">  
+{aspbbs:template src=common/link}
+</head>
+<body style="margin-top:0;overflow:hidden">
+
+
+<div class="fly-home fly-panel" style="background-image: url();" id="LAY_brain">
+  <a href="{aspbbs:indexprefix}u_{aspbbs:user.UserID}"><img src="{aspbbs:user.Avatar}" alt="{aspbbs:func:iif(isNul($user.NickName) ,$user.LoginName,$user.NickName )}" /></a>
+  <i class="iconfont icon-renzheng" title="{aspbbs:guestConfig.SiteName}会员级别"><small>{aspbbs:func:getHonorLevel($user.Experience)}</small></i>
+  <h1>
+    {aspbbs:func:iif(isNul($user.NickName) ,$user.LoginName,$user.NickName )}
+    <i class='iconfont icon-{aspbbs:func:iif( $user.Gender = 0 , "nv" , "nan" )}'></i> 
+	{if:$user.GroupID = ($guestConfig).VIPID}<i class="layui-badge fly-badge-vip">VIP</i>{end if}
+    <!--	 
+    <span style="color:#c00;">（管理员）</span>
+    <span style="color:#5FB878;">（社区之光）</span>
+    <span>（该号已被封）</span>
+    -->
+  </h1>
+
+  <p style="padding: 10px 0; color: #5FB878;">分组：{aspbbs:func:B_("UserGroup").where("GroupID = " & $user.GroupID).field("GroupName").getOne} | 等级：{aspbbs:func:getHonorTitle($user.Experience)}</p>
+
+  <p class="fly-home-info">
+    {aspbbs:guestConfig.ExperienceIcon}<span style="color: #FF7200;">{aspbbs:user.Experience} {aspbbs:guestConfig.ExperienceName}</span>
+    <i class="iconfont icon-shijian"></i><span>{aspbbs:func:POP_MVC.DateStr( $user.RegTime )} 加入</span>
+    <i class="iconfont icon-chengshi"></i><span>来自{aspbbs:func:iif(not isnul($user.City), $user.City, " 哪里？TA没说！" )}</span>
+  </p>
+
+  <p class="fly-home-sign">（{aspbbs:func:iif(not isNul($user.Sign) ,$user.Sign,"这个人懒得留下签名")}）</p>
+
+  
+  <div class="fly-sns" data-user="">
+	<!--
+    <a href="javascript:;" class="layui-btn layui-btn-primary fly-imActive" data-type="addFriend">加为好友</a>	 
+
+    -->
+	
+	<div class="layui-show-sm-inline layui-show-xs-block" > 
+	<a href="javascript:;" class="layui-btn {if: "{aspbbs:_S.adminName}" <> "" }layui-btn-normal fly-imActive{end if}" id="chatBtn" data-touser={aspbbs:user.UserID} data-type="chat">发起会话</a>
+	{if: "{aspbbs:_S.IsAdmin}" = 1}
+	<a href="javascript:;" class='layui-btn {aspbbs:func:iif($user.ThreadStatus=0,"layui-btn-danger","")}' id="ThreadStatus" data-touser={aspbbs:user.UserID} data-type="{aspbbs:user.ThreadStatus}">{aspbbs:func:iif($user.ThreadStatus=0,"允","禁")}发帖</a>
+	{end if}
+	</div>
+	
+	<div class="layui-show-sm-inline layui-show-xs-block" style="margin-top:10px;"> 
+	{if: "{aspbbs:_S.IsAdmin}" = 1}
+    <a href="javascript:;" class='layui-btn {aspbbs:func:iif($user.ReplyStatus=0,"layui-btn-danger","")}' id="ReplyStatus" data-touser={aspbbs:user.UserID} data-type="{aspbbs:user.ReplyStatus}">{aspbbs:func:iif($user.ReplyStatus=0,"允","禁")}回帖</a>
+	
+    <a href="javascript:;" class='layui-btn {aspbbs:func:iif($user.UserStatus=0,"layui-btn-danger","")}' id="UserStatus" data-touser={aspbbs:user.UserID} data-type="{aspbbs:user.UserStatus}">{aspbbs:func:iif($user.UserStatus=0,"允","禁")}帐户</a>
+	{end if}
+	</div>
+  </div>
+</div>
+
+<div class="layui-container" >
+
+  <div class="layui-row layui-col-space15">
+  
+    <div class="layui-col-md12">
+      <div class="fly-panel" style="padding:10px;">
+
+<ul class="layui-timeline">
+  {aspbbs:loopdata data=data}
+  <li class="layui-timeline-item">
+    <i class="layui-icon layui-timeline-axis"></i>
+    <div class="layui-timeline-content layui-text">
+      <h3 class="layui-timeline-title">[loopdata:_key_ func=iif( left(@me,4) = left(now,4) , POP_MVC.FormatDate(@me,"M月D日") , POP_MVC.FormatDate(@me,"YYYY年M月D日") )]</h3>
+      <p>
+        [loopdata:_item_]
+      </p>
+    </div>
+  </li>
+  {/aspbbs:loopdata}
+</ul>  
+      </div>
+    </div>  
+  </div>
+</div>
+
+{aspbbs:template src=common/footer2}
+
+</body>
+</html>

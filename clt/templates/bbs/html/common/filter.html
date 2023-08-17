@@ -1,0 +1,25 @@
+        <div class="fly-panel-title fly-filter">
+		  {if: LCase(POP_MVC.a) <> "search"}
+          <a href="{aspbbs:indexprefix}thread_index{aspbbs:guestConfig.PageSuffix}"{if1:"{aspbbs:func:LCase(POP_MVC.a)}"="index" or "{aspbbs:func:LCase(POP_MVC.a)}"="orderid" or "{aspbbs:func:LCase(POP_MVC.a)}"="orderreply"} class="layui-this"{end if1}>综合</a>
+          <span class="fly-mid"></span>
+          <a href="{aspbbs:indexprefix}thread_unsolved{aspbbs:guestConfig.PageSuffix}"{if1:"{aspbbs:func:LCase(POP_MVC.a)}"="unsolved"} class="layui-this"{end if1}>未结</a>
+          <span class="fly-mid"></span>
+          <a href="{aspbbs:indexprefix}thread_solved{aspbbs:guestConfig.PageSuffix}"{if1:"{aspbbs:func:LCase(POP_MVC.a)}"="solved"} class="layui-this"{end if1}>已结</a>
+          <span class="fly-mid"></span>
+          <a href="{aspbbs:indexprefix}thread_feature{aspbbs:guestConfig.PageSuffix}"{if1:"{aspbbs:func:LCase(POP_MVC.a)}"="feature"} class="layui-this"{end if1}>精华</a>
+          <span class="fly-filter-right layui-hide-xs">
+            <a href="{aspbbs:indexprefix}thread_orderID{aspbbs:guestConfig.PageSuffix}"{if1:"{aspbbs:func:LCase(POP_MVC.a)}"="orderid"} class="layui-this"{end if1}>按最新</a>
+            <span class="fly-mid"></span>
+            <a href="{aspbbs:indexprefix}thread_orderReply{aspbbs:guestConfig.PageSuffix}"{if1:"{aspbbs:func:LCase(POP_MVC.a)}"="orderreply"} class="layui-this"{end if1}>按热议</a>
+          </span>
+		  {else}
+		  <span class="fly-search"><i class="layui-icon"></i></span>搜索{aspbbs:SearchTip} : {aspbbs:SearchText}
+		  {if1: $_REQ.keys<>""}
+          <span class="fly-filter-right layui-hide-xs">
+            <a href="{aspbbs:indexprefix}c=bbs--thread&a=search&keys={aspbbs:_REQ.keys}" {aspbbs:func:iif($_REQ.searchtype<>1," class=""layui-this""" , "")}>按帖子标题</a>
+            <span class="fly-mid"></span>
+            <a href="{aspbbs:indexprefix}c=bbs--thread&a=search&searchtype=1&keys={aspbbs:_REQ.keys}" {aspbbs:func:iif($_REQ.searchtype=1," class=""layui-this""" , "")}>按帖子内容</a>
+          </span>
+		  {end if1}
+		  {end if}
+        </div>

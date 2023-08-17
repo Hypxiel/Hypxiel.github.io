@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>网站地图 - {aspbbs:guestConfig.SiteName}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="keywords" content="{aspbbs:guestConfig.SiteKeyWords}">
+  <meta name="description" content="{aspbbs:guestConfig.SiteDesc}">
+{aspbbs:template src=common/link}
+</head>
+<body>
+
+<h1 style="position: absolute; width:100%; text-align: center; top: 20px; left: 0; font-size: 20px; color: #333;">
+  <a href="{aspbbs:homepage}" style="color:#FFB800">{aspbbs:guestConfig.SiteName}</a> 网站地图
+</h1>
+
+<div class="layui-container">
+  <table class="layui-table layui-text">
+    <colgroup>
+      <col>
+      <col width="150">
+    </colgroup>
+    <thead>
+      <tr>
+        <th>帖子</th>
+        <th>发布时间</th>
+      </tr> 
+    </thead>
+    <tbody>
+	  {aspbbs:looprs data=thread}
+      <tr>
+        <td><a href="[looprs:TopicID func=getThreadLink(@me)]" title="[looprs:Title encode=html]" target="_blank">[looprs:Title]</a></td>
+        <td>[looprs:AddTime style=YYYY-MM-DD]</td>
+      </tr>
+	  {/aspbbs:looprs}
+    </tbody>
+  </table>
+</div>
+
+{aspbbs:template src=self/footer}
+
+</body>
+</html>

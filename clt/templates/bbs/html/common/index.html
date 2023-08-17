@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>{aspbbs:guestConfig.SiteName}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="keywords" content="{aspbbs:guestConfig.SiteKeyWords}">
+  <meta name="description" content="{aspbbs:guestConfig.SiteDesc}">
+{aspbbs:template src=common/link}
+</head>
+<body>
+
+{aspbbs:template src=common/header}
+
+<div class="layui-container">
+  <div class="layui-row layui-col-space15">
+    <div class="layui-col-md8">
+     <div class="fly-panel layui-hide-xs"> 
+      <div class="layui-row fly-panel-main" style="padding: 15px;"> 
+       <div class="layui-carousel fly-topline" id="FLY_topline"> 
+        <div carousel-item=""> 
+		 {aspbbs:looparr data=$_C.SLIDE_TITLE key=$_C.SLIDE_LINK image=$_C.SLIDE_IMAGE}
+         <div time-limit="2050-12-31"> 
+          <a href="[looparr:key]" target="_blank" id="fly-spm-event-banner-[looparr:i]" rel="nofollow"> <img src="[looparr:image]" alt="[looparr:data]" /> </a> 
+         </div> 
+		 {/aspbbs:looparr} 
+        </div> 
+       </div> 
+      </div>
+     </div> 
+      <div class="fly-panel">
+        <div class="fly-panel-title fly-filter">
+          <a>置顶</a>
+          <a href="#signin" class="layui-hide-sm layui-show-xs-block fly-right" id="LAY_goSignin" style="color: #FF5722;">去签到</a>
+        </div>
+        <ul class="fly-list">
+		   {aspbbs:looprs data=topList}
+          <li>
+            <a href="[looprs:UserID func=getUserULink(@me)]" class="fly-avatar">
+              <img src="[looprs:Avatar]" alt="[looprs:Nickname default=@LoginName]">
+            </a>
+            <h2>
+              <a class="layui-badge" href="{aspbbs:indexprefix}thread_list_[looprs:SortID]{aspbbs:guestConfig.PageSuffix}">[looprs:SortID func=getSortName(@me)]</a>
+              <a href="[looprs:TopicID func=getThreadLink(@me)]">[looprs:Content func=iif( inStr(@me , "src=") > 0 , "<i class='layui-icon' style='color:#5FB878'>&#xe64a;</i>" ,"" )] [looprs:Title]</a>
+            </h2>
+            <div class="fly-list-info">
+              <a href="[looprs:UserID func=getUserULink(@me)]" link>
+                <cite>[looprs:Nickname default=@LoginName]</cite>
+                <i class="iconfont icon-renzheng" title="等级：[looprs:Experience func=getHonorTitle(@me)]"><small>[looprs:Experience func=getHonorLevel(@me)]</small></i>
+                {if: [looprs:GroupID]=1 and $_S.IsAdmin = 1}<i class="layui-badge fly-badge-vip">管理员</i>{end if}
+                {if: [looprs:GroupID]=($guestConfig).VIPID}<i class="layui-badge fly-badge-vip">VIP</i>{end if}
+
+              </a>
+			  <a href="{aspbbs:sitepath}/?c=Bbs--thread&a=Search&date=[looprs:AddTime style=YYYY-MM-DD]" link>[looprs:AddTime func=POP_MVC.DateStr(@me)]</a>
+              
+              <span class="fly-list-kiss layui-hide-xs" title="{aspbbs:guestConfig.RewardTitle}">{aspbbs:guestConfig.ExperienceIcon} [looprs:AnswerReward]</span>
+			  {if: "[looprs:IsSolved]" = "1"}
+              <span class="layui-badge fly-badge-accept layui-hide-xs">已结</span>
+			  {end if}
+              <a class="fly-list-nums" href="[looprs:TopicID func=getThreadLink(@me)]#flyReply" link> 
+                <i class="iconfont icon-pinglun1" title='查看回帖:[looprs:Title func:POP_MVC.String.jsonEncode(@me)]'></i> [looprs:ReplyCount]
+              </a>
+            </div>
+            <div class="fly-list-badge">
+				{if: "[looprs:IsFeatured]" = "1"}
+              <span class="layui-badge layui-bg-red">精帖</span>
+			    {end if}
+            </div>
+          </li>
+		  {/aspbbs:looprs}
+        </ul>
+      </div>
+
+      <div class="fly-panel" style="margin-bottom: 0;">
+        {aspbbs:template src=common/filter}
+		{aspbbs:template src=common/list}
+        {aspbbs:template src=$pagelist}
+      </div>
+    </div>
+    <div class="layui-col-md4">
+     <div class="fly-panel"> 
+      <h3 class="fly-panel-title">温馨通道</h3> 
+      <div class="layui-row fly-panel-main" style="padding: 15px;"> 
+       <div class="layui-clear fly-list-quick"> 
+		{aspbbs:looparr data=$_C.SIDE_LINKNAME key=$_C.SIDE_LINKURL}
+        <div class="layui-col-xs6"> 		
+         <div> 
+          <a href="[looparr:key]" target="_blank"> [looparr:data] </a> 
+         </div> 
+        </div> 
+		{/aspbbs:looparr}
+        <a name="signin"> </a> 
+       </div> 
+      </div>
+     </div> 
+	 
+
+
+      <div class="fly-panel fly-signin">
+        <div class="fly-panel-title">
+          签到
+          <i class="fly-mid"></i> 
+          <a href="javascript:;" class="fly-link" id="LAY_signinHelp">说明</a>
+          <i class="fly-mid"></i> 
+          <a href="javascript:;" class="fly-link" id="LAY_signinTop">活跃榜<span class="layui-badge-dot"></span></a>
+		  {if: "{aspbbs:_S.adminName}" <> "" }
+          <span class="fly-signin-days">已连续签到<cite>{aspbbs:SignDays}</cite>天</span>
+		  {end if}
+        </div>
+        <div class="fly-panel-main fly-signin-main">
+		  {if: NOT {aspbbs:IsSign} }
+          <button class="layui-btn layui-btn-danger" id="LAY_signin">今日签到</button>
+		  {end if}
+		  
+		  {if: "{aspbbs:_S.adminName}" <> "" }
+			{if1: NOT {aspbbs:IsSign} }
+				<span>可获得<cite>{aspbbs:SignExperience}</cite>{aspbbs:guestConfig.ExperienceName}</span>
+			{else}
+				<button class="layui-btn layui-btn-disabled">今日已签到</button>
+				<span>获得了<cite>{aspbbs:SignExperience}</cite>{aspbbs:guestConfig.ExperienceName}</span>
+			{end if1}
+		  {end if}
+        </div>
+      </div>
+
+      <div class="fly-panel fly-rank fly-rank-reply" id="LAY_replyRank">
+        <h3 class="fly-panel-title">{aspbbs:guestConfig.IndexHotReplyTitle}</h3>
+        <dl>
+          <!--<i class="layui-icon fly-loading">&#xe63d;</i>-->
+		  {aspbbs:looprs data=HotReply}
+          <dd>
+            <a href="[looprs:UserID func=getUserULink(@me)]">
+              <img src='[looprs:UserID func=($kvs)(@me)("Avatar")]' /><cite>[looprs:UserID func=($kvs)(@me)("Nickname")]</cite><i>[looprs:ReplyCount]次回答</i>
+            </a>
+          </dd>
+		  {/aspbbs:looprs}
+        </dl>
+      </div>	  
+	  
+      {aspbbs:template src=common/right-ad}	  
+
+      <dl class="fly-panel fly-list-one">
+        <dt class="fly-panel-title">{aspbbs:guestConfig.IndexHotTitle}</dt>
+		{aspbbs:looprs data=HotTopic}
+        <dd>
+          <a href="[looprs:TopicID func=getThreadLink(@me)]">[looprs:Title]</a>
+          <span><i class="iconfont icon-pinglun1"></i> [looprs:ReplyCount]</span>
+        </dd>
+		{/aspbbs:looprs}
+		
+        {if: $HotTopicCount < 1 }
+		<!-- 无数据时 -->
+        <div class="fly-none">没有相关数据</div>
+        {end if}
+      </dl>
+	  
+	  {//首页产品推广}
+	  {if: guestConfig.SelfIndexProduct=1}
+	  {aspbbs:template src=self/index_product}
+      {end if}
+	  
+      <div class="fly-panel fly-link">
+        <h3 class="fly-panel-title">友情链接</h3>
+        <dl class="fly-panel-main">
+		  {aspbbs:looparr data=$_C.LINKS_TITLE key=$_C.LINKS_LINK}
+          <dd><a href="[looparr:key]" target="_blank">[looparr:data]</a><dd>
+		  {/aspbbs:looparr}
+          <dd><a href="javascript:;" onclick="layer.alert('发送邮件至：{aspbbs:companyemail}<br> 邮件标题为：申请{aspbbs:guestConfig.SiteName}友链', {title:'申请友链'});" class="fly-link">申请友链</a><dd>
+        </dl>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+{aspbbs:template src=self/footer}
+{aspbbs:template src=self/donate-js}
+</body>
+</html>

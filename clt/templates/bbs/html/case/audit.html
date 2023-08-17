@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html style="background-color: #e2e2e2;">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>发现 {aspbbs:C_.CMS_NAME} {aspbbs:theYear} 年度最佳案例</title>
+  <meta name="keywords" content="{aspbbs:guestConfig.SiteKeyWords}">
+  <meta name="description" content="{aspbbs:guestConfig.SiteDesc}">  
+{aspbbs:template src=common/link}
+  <style>
+  .header{border-bottom: 1px solid #404553; border-right: 1px solid #404553;}
+  </style>
+</head>
+<body class="fly-full">
+
+{aspbbs:template src=common/header_user}
+
+<div class="fly-case-header">
+	<p class="fly-case-year">{aspbbs:theYear}</p>
+	<p class="fly-case-header-desc"> <a href="{aspbbs:indexprefix}case_{aspbbs:curYear}{aspbbs:guestConfig.PageSuffix}"> 发现年度最佳 layui 案例 </a> </p>
+  <div class="fly-case-btn">
+    <a href="javascript:;" class="layui-btn layui-btn-big fly-case-active" data-type="push">提交案例</a>
+    <a href="{aspbbs:mycaseUrl}{aspbbs:guestConfig.PageSuffix}" class="layui-btn layui-btn-primary layui-btn-big">我的案例</a>
+
+    <a href="{aspbbs:func:getThreadLink(4)}" target="_blank" style="padding: 0 15px; text-decoration: underline">案例要求</a>
+  </div>
+</div>
+
+<div class="fly-main" style="overflow: hidden;">
+    
+	<div class="layui-tab layui-tab-brief" style="position: relative; margin-top: 30px;">
+		<ul class="layui-tab-title">
+			<li{if: LCase(POP_MVC.a)="audit"} class="layui-this"{end if}><a href='{aspbbs:func:getCaseAuditLink($theYear,"")}'>全部案例</a></li>
+			<li{if: LCase(POP_MVC.a)="audit0"} class="layui-this"{end if}><a href="{aspbbs:func:getCaseAuditLink($theYear,0)}">未审核案例</a></li>
+			<li{if: LCase(POP_MVC.a)="audit1"} class="layui-this"{end if}><a href="{aspbbs:func:getCaseAuditLink($theYear,1)}">已通过案例</a></li>
+			<li{if: LCase(POP_MVC.a)="audit2"} class="layui-this"{end if}><a href="{aspbbs:func:getCaseAuditLink($theYear,2)}">已拒绝案例</a></li>
+		</ul>
+		<div class="layui-form" style="width: 200px; position: absolute; right: 0; top: -8px;">
+			<select lay-filter="change-case-year">
+				{aspbbs:looparr data=$arrYear}
+				<option value="[looparr:data]" [looparr:item selected=$theYear]>[looparr:data] 年度</option>
+				{/aspbbs:looparr}
+			</select>
+		</div>
+	</div>
+
+  <ul class="fly-case-list">
+	{aspbbs:looprs data=case page=1}
+    <li data-id="[looprs:TopicID]">
+      <div class="fly-case-img" target="_blank" >
+        <img src="[looprs:IndexImage]" alt="[looprs:Title]">
+        <a class="layui-btna layui-btn-primary layui-btn-small" href="{aspbbs:indexprefix}bbs--Topic_edit_[looprs:TopicID]{aspbbs:guestConfig.PageSuffix}" target="_blank">编辑</a>
+        <a class="layui-btnb layui-btn-primary layui-btn-small fly-case-active" href="javascript:;" data-type="del">删除</a>
+      </div>
+      <h2><a href="[looprs:ContentSource]" target="_blank">[looprs:Title]</a></h2>
+      <p class="fly-case-desc">[looprs:Content]</p>
+      <div class="fly-case-info">
+        <a href="[looprs:UserID func=getUserULink(@me)]" class="fly-case-user" target="_blank"><img src="[looprs:UserID func=B_("User").where(@me).field("Avatar").getOne]"></a>
+        <p class="layui-elip" style="font-size: 12px;">[looprs:AddTime func=POP_MVC.DateStr(@me)]</p>
+        <p class="fly-case-nums fly-case-active" style=" padding:0 5px; color: #01AAED;">{if: "[looprs:ContentStatus]" = "0"}未审核{elseif "[looprs:ContentStatus]" = "1"}已通过{else}已拒绝{end if}</p>
+		<button class="layui-btn {if: "[looprs:ContentStatus]" <> "1"}layui-btn-primary{end if} fly-case-active case-left-btn" data-type="set" field="ContentStatus" rank="1">通过</button>
+		<button class="layui-btn {if: "[looprs:ContentStatus]" = "2"}layui-btn-danger{else}layui-btn-primary{end if} fly-case-active case-right-btn" data-type="set" field="ContentStatus" rank="2">拒绝</button>        
+        <!-- <button class="layui-btn  fly-case-active" data-type="praise">已赞</button> -->
+      </div>
+    </li>
+	{/aspbbs:looprs}
+  </ul>
+  
+		{if: "[page:total]" = "0"}
+        <blockquote class="layui-elem-quote layui-quote-nm">无{aspbbs:theYear}年度该查询数据</blockquote>
+		{end if}
+    
+		{aspbbs:template src=common/pagelist}
+
+
+</div>
+
+{aspbbs:template src=self/footer}
+<script>layui.use('form',function(form){form.on('select(change-case-year)',function(obj){location.href ='?bbs--case_audit_'+ obj.value + '{aspbbs:guestConfig.PageSuffix}' ;});});</script>
+</body>
+</html>

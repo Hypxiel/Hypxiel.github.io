@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>用户中心 - {aspbbs:guestConfig.SiteName}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+{aspbbs:template src=common/link}
+</head>
+<body>
+
+{aspbbs:template src=common/header_user}
+
+<div class="layui-container fly-marginTop fly-user-main">
+	{aspbbs:template src=common/user-nav}
+  
+  
+  <div class="fly-panel fly-panel-user" pad20>
+
+    <div class="fly-msg" style="margin-top: 15px;">
+      用户管理
+    </div>
+			
+
+    <div class="layui-tab layui-tab-brief" lay-filter="user">
+
+		<div class="layui-form layui-form-pane layui-tab-item layui-show">
+			<div class="layui-form-item" style="color:#666">
+
+  <div class="layui-input-inline">
+    <input class="layui-input" name="keyword" id="keyword" autocomplete="off">
+  </div>
+  <div class="layui-input-inline">
+  <button class="layui-btn" data-type="reload" id="soBtn">搜索</button>
+  </div>
+			
+					<label class="layui-form-label">查看</label>
+				  <div class="layui-input-inline">					  
+					  <select name="ViewType" id="ViewType" lay-filter="ViewType">
+						 <option value="">全部</option>
+						 <option value="IsAdmin=1">管理员</option>
+						 <option value="a.GroupID=3">普通会员</option>
+						 <option value="ThreadStatus=0">禁发帖</option>
+						 <option value="ReplyStatus=0">禁回帖</option>
+						 <option value="UserStatus=0">禁登陆</option>
+						 <option value="(ThreadStatus=0 OR ReplyStatus=0 OR UserStatus=0)">任何一禁</option>
+					  </select>  
+				  </div>
+				<div class="layui-input-inline">	
+					  <select name="DealType" id="DealType" lay-filter="DealType">
+						 <option value="">--选择操作--</option>
+						 <option value="IncExperience">送{aspbbs:guestConfig.ExperienceName}</option>
+						 <option value="DecExperience">减{aspbbs:guestConfig.ExperienceName}</option>
+						 <option value="CloseThread">禁发帖</option>
+						 <option value="OpenThread">允发帖</option>
+						 <option value="CloseReply">禁回帖</option>
+						 <option value="OpenReply">允回帖</option>
+						 <option value="CloseStatus">禁登陆</option>
+						 <option value="OpenStatus">允登陆</option>
+					  </select> 
+				</div>
+			</div>
+		</div>	
+
+	
+<table class="layui-table" lay-filter="userList" id="userList"></table>
+ 
+<script type="text/html" id="barDemo">
+  <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
+  {/*
+  <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+  <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+  */}
+</script>
+    </div>
+  </div>
+</div>
+
+{aspbbs:template src=self/footer}
+
+</body>
+</html>

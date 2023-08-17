@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>{aspbbs:thread.Title} - {aspbbs:guestConfig.SiteName}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="keywords" content="{aspbbs:guestConfig.SiteKeyWords}">
+  <meta name="description" content="{aspbbs:func:POP_MVC.String.cut( POP_MVC.String.strip_tags( $thread.Content , "html" ) , 80 )}">
+{aspbbs:template src=common/link}
+</head>
+<body>
+
+{aspbbs:template src=common/header_user}
+
+<div class="layui-hide-xs">
+{aspbbs:template src=common/column}
+</div>
+
+<div class="layui-container">
+  <div class="layui-row layui-col-space15">
+    <div class="layui-col-md8 content detail">
+      <div class="fly-panel detail-box">
+        <h1>{aspbbs:thread.Title}</h1>
+        <div class="fly-detail-info">
+		  {if: "{aspbbs:thread.ContentStatus}" = "0" }
+			<span class="layui-badge">审核中</span>
+		  {end if}
+		  
+		  {if: "{aspbbs:thread.ContentStatus}" = "2" }
+			<span class="layui-badge">已删除</span>
+		  {end if}
+		  
+          <span class="layui-badge layui-bg-green fly-detail-column">{aspbbs:func:getSortName($thread.SortID)}</span>
+          
+		  {if: "{aspbbs:thread.IsSolved}" <> "0"}
+		  <span class="layui-badge" style="background-color: #5FB878;">已结</span>
+		  {else}
+          <span class="layui-badge" style="background-color: #999;">未结</span>
+          {end if}
+          
+		  {if: "{aspbbs:thread.IsTop}" = "1" }
+          <span class="layui-badge layui-bg-black">置顶</span>
+		  {end if}		  
+		  
+		  {if: "{aspbbs:thread.IsFeatured}" = "1" }
+          <span class="layui-badge layui-bg-red">精帖</span>
+		  {end if}
+          
+          <div class="fly-admin-box" data-id="{aspbbs:thread.TopicID}">
+			{if: "{aspbbs:thread.LoginName}" = "{aspbbs:_S.adminName}" or "{aspbbs:_S.GroupID}" = "1" }
+            <span class="layui-btn layui-btn-xs jie-admin" type="del">删除</span>
+			{end if}
+            
+			{if: "{aspbbs:_S.GroupID}" = "1" and "{aspbbs:thread.IsTop}" = "0" }
+            <span class="layui-btn layui-btn-xs jie-admin" type="set" field="IsTop" rank="1">置顶</span>
+			{end if}
+			
+			{if: "{aspbbs:_S.GroupID}" = "1" and "{aspbbs:thread.IsTop}" = "1" }
+            <span class="layui-btn layui-btn-xs jie-admin" type="set" field="IsTop" rank="0" style="background-color:#ccc;">取消置顶</span>
+			{end if}
+            
+			{if: "{aspbbs:_S.GroupID}" = "1" and "{aspbbs:thread.IsFeatured}" = "0" }
+            <span class="layui-btn layui-btn-xs jie-admin" type="set" field="IsFeatured" rank="1">加精</span> 
+			{end if}
+			
+			{if: "{aspbbs:_S.GroupID}" = "1" and "{aspbbs:thread.IsFeatured}" = "1" }
+            <span class="layui-btn layui-btn-xs jie-admin" type="set" field="IsFeatured" rank="0" style="background-color:#ccc;">取消加精</span>
+			{end if}
+			
+			{if: "{aspbbs:_S.IsAdmin}" = "1" and "{aspbbs:thread.IsNoComment}" = "1" }
+            <span class="layui-btn layui-btn-xs jie-admin" type="set" field="IsNoComment" rank="0" style="background-color:#ccc;">允许评论</span>
+			{end if}
+			
+			{if: "{aspbbs:_S.IsAdmin}" = "1" and "{aspbbs:thread.IsNoComment}" = "0" }
+            <span class="layui-btn layui-btn-xs jie-admin" type="set" field="IsNoComment" rank="1" style="background-color:#ccc;">禁止评论
+			{end if}
+			
+          </div>
+          <span class="fly-list-nums"> 
+            <a href="#flyReply"><i class="iconfont" title="回答">&#xe60c;</i> {aspbbs:thread.ReplyCount}</a>
+            <i class="iconfont" title="人气">&#xe60b;</i> {aspbbs:thread.Visits}
+          </span>
+        </div>
+		
+		
+        <div class="detail-about">
+          <a class="fly-avatar" href="{aspbbs:indexprefix}u_{aspbbs:thread.UserID}">
+            <img src="{aspbbs:thread.Avatar}" alt="{aspbbs:thread.Nickname}">
+          </a>
+          <div class="fly-detail-user">
+            <a href="{aspbbs:indexprefix}u_{aspbbs:thread.UserID}" class="fly-link">
+              <cite>{aspbbs:thread.Nickname}</cite>
+              <!--<i class="iconfont icon-renzheng" title="认证信息：XXX"></i> -->
+              {if: $thread.GroupID=1 and $_S.IsAdmin = 1}<i class="layui-badge fly-badge-vip">管理员</i>{end if}
+              {if: $thread.GroupID = ($guestConfig).VIPID}<i class="layui-badge fly-badge-vip">VIP</i>{end if}
+            </a>
+            <span>{aspbbs:func:POP_MVC.DateStr( $thread.addtime )}</span>
+          </div>
+			{if: "{aspbbs:thread.AnswerReward}"<>"0" and "{aspbbs:thread.AnswerReward}"<>"" }
+		  	<div class="detail-hits">
+				<span style="padding-right: 10px; color: #FF7200">悬赏：{aspbbs:thread.AnswerReward}{aspbbs:guestConfig.ExperienceName}</span>
+			</div>
+			{end if}
+        </div>
+		<div class="layui-btn-container fly-detail-admin" id="LAY_jieAdmin" data-id="{aspbbs:thread.TopicID}">
+			<a class="layui-btn layui-btn-sm jie-admin" type="edit" href="{aspbbs:indexprefix}bbs--Topic_edit_{aspbbs:thread.TopicID}{aspbbs:guestConfig.PageSuffix}">编辑</a>
+			<button class="layui-btn layui-btn-sm jie-admin jie-admin-collect" type="collect" data-type="add"> 收藏 </button>
+		</div>
+        <div class="detail-body photos">
+		  {if: POP_MVC.file.isFile($thread.IndexImage) }
+			<div><img src="{aspbbs:func:$thread.IndexImage}"></div>
+		  {end if}
+          {aspbbs:thread.Content}
+		  <!--
+          封面<hr>
+          <p>
+            <img src="" alt="{aspbbs:guestConfig.SiteName}社区">
+          </p>
+		  -->
+        </div>
+      </div>
+
+      <div class="fly-panel detail-box" id="flyReply">
+	  {if: "{aspbbs:thread.IsNoComment}" = "0" OR len($summernote) <> 0 }
+        <fieldset class="layui-elem-field layui-field-title" style="text-align: center;">
+          <legend>回帖</legend>
+        </fieldset>
+      {end if}
+        <ul class="jieda">
+		  {aspbbs:looprs data=reply page=1}
+          <li data-id="[looprs:ReplyID]" data-user="[looprs:UserID]" class="jieda-daan">
+            <a name="item-[looprs:ReplyID]" href=""></a>
+            <div class="detail-about detail-about-reply">
+              <a class="fly-avatar" href="[looprs:UserID func=getUserULink(@me)]">
+                <img src="[looprs:Avatar]" alt=" ">
+              </a>
+              <div class="fly-detail-user">
+                <a class="fly-link" href="[looprs:UserID func=getUserULink(@me)]">
+                  <cite>[looprs:Nickname default=@LoginName]</cite>
+                  <!-- <i class="iconfont icon-renzheng" title="认证信息：XXX"></i> -->
+				{if: "[looprs:GroupID]"="4"}
+                  <i class="layui-badge fly-badge-vip">VIP</i>    
+				{end if}
+                </a>
+				{if: "[looprs:IsAdmin]"="1" AND "{aspbbs:_S.adminId}"<>""}
+				 <span style="color:#5FB878">(管理员)</span>
+				{end if}
+				
+				{if: "[looprs:UserStatus]"="0"}
+				 <span style="color:#999">（该号已被封）</span>
+				{end if}
+                <!--
+               
+                <span style="color:#FF9E3F">（社区之光）</span>
+                
+                -->
+              </div>
+
+              <div class="detail-hits">
+                <span>[looprs:AddTime func=POP_MVC.DateStr( @me )]</span>
+              </div>
+			  {if: "[looprs:IsAdopted]"="1" }
+              <i class="iconfont icon-caina" title="最佳答案"></i>
+			  {end if}
+            </div>
+            <div class="detail-body jieda-body photos">
+              [looprs:Content]
+            </div>
+            <div class="jieda-reply">
+              <span class='jieda-zan{if: not {aspbbs:func:B_("self_GuestDigg").where("UserID=[looprs:UserID] AND instr( ',' & ReplyZan & ',' , ',' & '[looprs:ReplyID]' & ',' ) > 0").field("UserID").find.eof} } zanok{end if}' type="zan">
+                <i class="iconfont icon-zan"></i>
+                <em>[looprs:ZanCount]</em>
+              </span>
+              <span type="reply">
+                <i class="iconfont icon-svgmoban53"></i>
+                回复
+              </span>
+              <div class="jieda-admin">
+				{if: ("{aspbbs:_S.adminId}"="[looprs:UserID]" AND $guestConfig.ReplyEditAllow=1) OR "{aspbbs:_S.IsAdmin}" = 1 }
+                <span onclick="location.href='?bbs--Reply_Edit_[looprs:ReplyID]'">编辑</span>
+				{end if}
+				{if: ("{aspbbs:_S.adminId}"="[looprs:UserID]" AND $guestConfig.ReplyDelAllow=1) OR "{aspbbs:_S.IsAdmin}" = 1 }
+                <span type="del">删除</span>
+				{end if}
+				{if: "{aspbbs:thread.IsSolved}"<>"1"}
+                <span class="jieda-accept" type="accept">采纳</span>
+				{end if}
+              </div>
+            </div>
+          </li>
+          {/aspbbs:looprs}
+
+          
+          {if: [page:total] = 0 AND len($summernote) <> 0 }
+          <li class="fly-none">消灭零回复</li>
+		  {end if}
+        </ul>
+      <div style="text-align: center"> 
+        <div class="laypage-main">
+		{if:"[page:prevlink]"<>""}
+		  <a href="{aspbbs:func:getPageHeader}{aspbbs:_GET.id}_[page:prev]" class="laypage-prev">上一页</a>
+		{end if}
+		
+		{if:"[page:firstlink]"<>""}
+		  <a href="{aspbbs:func:getPageHeader}{aspbbs:_GET.id}{aspbbs:guestConfig.PageSuffix}" class="laypage-first" title="首页">首页</a>
+		{end if}
+
+		{if:[page:current]>4}
+		  <span>…</span>
+		{end if}
+		
+		{looprs:pagenumber len=5}
+		  {if: [pagenumber:page]=[page:current]}
+			<span class="laypage-curr">[pagenumber:page]</span>
+		  {else}
+			<a href="{aspbbs:func:getPageHeader}{aspbbs:_GET.id}_[pagenumber:page]{aspbbs:guestConfig.PageSuffix}">[pagenumber:page]</a>
+		  {end if}
+		{/looprs:pagenumber}
+		  
+		{if:[page:count] - [page:current]>2}
+		  <span>…</span>
+		{end if}	
+
+		{if:"[page:lastlink]"<>""}
+		  <a href="{aspbbs:func:getPageHeader}{aspbbs:_GET.id}_[page:count]{aspbbs:guestConfig.PageSuffix}" class="laypage-last" title="尾页">尾页</a>
+		{end if}		
+		  
+		{if:"[page:nextlink]"<>""}
+		  <a href="{aspbbs:func:getPageHeader}{aspbbs:_GET.id}_[page:next]{aspbbs:guestConfig.PageSuffix}" class="laypage-next">下一页</a>
+		{end if}  
+		</div>
+      </div> 
+			{if: isNumeric($summernote) }
+				<blockquote class="layui-elem-quote layui-quote-nm layui-disabled" style="margin: 10px 0 20px; padding: 50px 20px; text-align: center; color: #999!important;">
+				   {aspbbs:NoReplyTip}
+				  </blockquote> 
+			{else}
+        <div class="layui-form layui-form-pane">
+          <form action="?bbs--Reply_doAdd" method="post">
+            <div class="layui-form-item layui-form-text">
+              <div class="layui-input-block">				  
+                <textarea id="L_content" name="content" required lay-verify="required" 
+				placeholder="{aspbbs:placeholder}"  
+				class="layui-textarea" 
+				style="height:{if1:checkwap()}150{else}300{end if1}px;" 				
+				{if1:checkWap()}toolbar="{aspbbs:guestConfig.EditorToolMobile}"{end if1}
+				></textarea>
+				{aspbbs:summernote}	
+              </div>
+            </div>
+			   {if1: "{aspbbs:guestConfig.ReplyVerify}"="1" AND $_S.IsAdmin<>1 AND NOT checkwap()}
+              <div class="layui-form-item">
+                <label for="L_vercode" class="layui-form-label">图形码</label>
+                <div class="layui-input-inline">
+                  <input type="text" id="L_vercode" name="verify" required lay-verify="required" placeholder="请回答后面的验证码" autocomplete="off" class="layui-input">
+                </div>
+                <div class="layui-form-mid">
+                  <span style="color: #c00;">{aspbbs:checkimg}</span>
+                </div>
+              </div>
+			  {end if1}
+            <div class="layui-form-item">
+              <input type="hidden" name="TopicID" value="{aspbbs:thread.TopicID}">
+              <input type="hidden" name="page" value="[page:count]">
+              <input type="hidden" name="MessageToUser" value="{aspbbs:thread.UserID}">
+              <input type="hidden" name="MessageTitle" value="{aspbbs:thread.Title}">
+              <button class="layui-btn" lay-filter="*" lay-submit>提交回复</button>
+            </div>
+          </form>
+        </div>
+		{end if}
+      </div>
+    </div>
+    <div class="layui-col-md4">
+		{aspbbs:template src=common/hotThread}
+		{aspbbs:template src=common/right-ad}
+		
+		{if: guestConfig.SelfDetailAd=1}
+		{aspbbs:template src=self/thread_detail_ad}
+		{end if}
+  </div>
+</div>
+
+{aspbbs:template src=self/footer}
+
+{//百度收录通过js实时推送，本地不推送，一周后不推送}
+{if: not is_localhost() and guestConfig.ThreadBaiduPush = 1 and Datediff( "d"  , $thead.AddTime, now() ) < 8 }
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https'){
+   bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+  }
+  else{
+  bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+  }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+{end if}
+</body>
+</html>

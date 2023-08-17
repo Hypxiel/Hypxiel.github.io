@@ -1,0 +1,22 @@
+<script>
+var ASPBBS = {};
+ASPBBS.ExperienceName = "{aspbbs:guestConfig.ExperienceName}";
+</script>
+
+<script src="{aspbbs:sitetplpath}/res/layui/layui{if:LCase(POP_MVC.get("c"))="bbs--thanks"}-donate{end if}.js"></script>
+<script>
+layui.cache.page = '{aspbbs:layuicachepage}';
+layui.cache.user = {
+  username: '{aspbbs:func:iif(not isNul($_S.adminName),$_S.adminName,"游客")}'
+  ,uid: '{aspbbs:func:iif(not isNul($_S.adminId),$_S.adminId,"-1")}'
+  ,avatar: '{aspbbs:sitetplpath}/res/images/avatar/00.jpg'
+  ,experience: '{aspbbs:func:iif(not isNul($_S.Expirence),$_S.Experience,0)}'
+  ,sex: '{aspbbs:func:iif($_S.Gender=0,女,男)}'
+};
+layui.config({
+  version: "{aspbbs:_C.version}"
+  ,base: '{aspbbs:sitetplpath}/res/mods/'  //这里实际使用时，建议改成绝对路径
+}).extend({
+  fly: 'index'
+}).use('fly');
+</script>
