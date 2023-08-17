@@ -1,0 +1,69 @@
+2021.6.20 0.9.9版本发布
+2021.6.20 1.0.0版本发布
+  删除了文件中多余的bbs.asp
+  添加了 /configs.class.asp
+  修改了 /default.asp ，改 set config = T_( "configs" )
+2021.6.20 1.0.1版本发布
+  对 /configs.class.asp 中的各项参数进行了详细说明
+  修改了 core/extend/bbs/topic.class.asp ，解决了错误提示无权限编辑自己的帖子
+2021.6.20 1.0.2版本发布
+  修复了一些bug
+2021.6.23 1.0.3
+  将栏目、幻灯片、广告、友链从配置文件移到了后台
+  优化了邮件提示，提示更加友好
+  论坛关闭后，会将开启网址发到管理员邮箱
+2021.7.14 1.0.4
+  添加、修改帖子时不显示添加帖子的固定bar
+  手机版时添加、修改帖子时，图片最大显示30%
+  添加了捐赠功能
+  修复了已知的bug
+2021.7.15 1.0.5
+  修复了签到活跃榜NaN与undefined的取值错误bug
+2021.7.24 1.0.7
+  添加了系统管理模块，含初始化、压缩、备份、还原数据库，数据库转换、切换功能
+  添加了安全策略功能
+  完善了模板细节
+2021.8.12 1.0.8
+  纠正了1.0.7已知的几个bug
+  添加了冗余文件检测与空文件检测功能
+  添加了用户管理模块
+2021.8.16 1.1.0  
+  1.URL进行了大刀阔斧的修改，优化后的URL更简短，SEO更优：
+  帖子链接由 ?bbs--thread_detail_1.html 改为四种可选项，默认为 ?1.html
+  首页列表链接由 ?bbs--thread_index_0_2.html 改为 ?index_2.html
+  用户主页链接由 ?bbs--u_1 改为 ?u_1
+  栏目链接由     ?bbs--thread_list_48.html 改为 ?list_48.html
+  案例页面链接由 ?bbs--case.html 改为 ?case.html
+  捐赠页面链接由 ?bbs--thanks 改为 ?thanks.html
+  登陆页面链接由 ?bbs--login.html 改为 ?login.html
+  登出链接由 	 ?bbs--logout.html 改为 ?logout.html
+  注册页面链接由 ?bbs--reg.html 改为 ?reg.html
+  发表新帖链接由 ?bbs--Topic_Add.html 改为 ?post.html
+  其他一些链接也进行了URL优化，主要特点是去掉了bbs--
+  要修改链接，需要修改/config.asp中的url配置项URL_RULE 与/core/Extend/bbs/config.inc.asp文件中的函数
+  
+  2.让aspbbs从iaspcms完全分离
+  将项目路径POP_MVC.appPath的值从 /core/home 改为 /core ，删掉了多余的home文件夹与多余的控制器与数据模型
+  给popasp增加一个类 aspbbs ，专门用来处理aspbbs，不再借助iaspcms类
+  模板标签修改，如{iaspcms:sitename} 改为 {aspbbs:sitename}
+  删掉了数据表iaspcms_config，让aspbbs与iaspcms彻底分离
+  
+  3.其他修改
+  添加了用户主页的时间线页面，链接为 ?v_1
+  将 /configs.class.asp 与 /settings.class.asp 两个文件合并为 /core/configs.class.asp
+  优化了cookie自动登陆
+  添加了新帖审核发布功能
+  添加了改帖审核发布功能
+  添加了百度收录推送配置
+  添加了网站地图
+  对模板文件进行了调整，需要个性化处理的模板文件集中放到了html/self
+  增加了配置“模板设置”一栏，可对模板中一些个性化设置进行开启或关闭
+2021.8.16 1.1.1
+  修复了用户管理中分页不起作用的bug
+  网站配置在手机中显示时表单选项出现多余的冒号，予以修复
+  系统管理在手机显示时，tab切换不美观，予以修复
+2021.8.18 1.1.2
+  修复了点赞js中的逻辑错误
+  修复了网站地图中帖子链接地址的错误
+  修复了使用sqlite3数据库时不能自动cookie登陆的bug
+  对帖子标题进行了去html标签处理
