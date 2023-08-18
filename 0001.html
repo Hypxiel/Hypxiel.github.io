@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Hack Game</title>
+  <style>
+    body {
+      background-color: #000;
+      color: #0F0;
+      font-family: monospace;
+      text-align: center;
+    }
+
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>Welcome to Hack Game!</h1>
+  <p>Try to hack into the system:</p>
+  <form id="hackForm">
+    <input type="password" id="passwordInput" />
+    <br />
+    <button type="submit">Hack</button>
+  </form>
+
+  <div id="successMessage" class="hidden">
+    <h2>Access Granted!</h2>
+    <p>Congratulations, you successfully hacked into the system.</p>
+  </div>
+
+  <script>
+    document.getElementById("hackForm").addEventListener("submit", function(event) {
+      event.preventDefault();
+
+      var input = document.getElementById("passwordInput").value;
+      if (input === "password") {
+        document.getElementById("hackForm").classList.add("hidden");
+        document.getElementById("successMessage").classList.remove("hidden");
+      } else {
+        alert("Access Denied!");
+      }
+    });
+  </script>
+</body>
+</html>
